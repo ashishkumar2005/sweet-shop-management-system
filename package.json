@@ -70,6 +70,7 @@
         "jsonwebtoken": "^9.0.3",
         "lucide-react": "^0.552.0",
         "mini-svg-data-uri": "^1.4.4",
+        "mongoose": "^9.0.1",
         "motion": "^12.23.24",
         "motion-dom": "^12.23.23",
         "next": "15.3.6",
