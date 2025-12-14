@@ -27,10 +27,12 @@ export default function HomePage() {
   const fetchSweets = async () => {
     try {
       const res = await fetch('/api/sweets')
+      if (!res.ok) throw new Error('Failed to fetch')
       const data = await res.json()
       setSweets(data.sweets || [])
     } catch (error) {
       console.error('Failed to fetch sweets:', error)
+      setSweets([])
     } finally {
       setIsLoading(false)
     }
