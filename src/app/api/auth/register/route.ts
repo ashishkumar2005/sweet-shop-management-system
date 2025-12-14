@@ -1,48 +1,52 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
-import { generateToken, hashPassword } from '@/lib/auth'
+import { NextResponse } from 'next/server'
+import { getDb } from '@/lib/mongodb'
+import bcrypt from 'bcryptjs'
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const { email, password, name } = await request.json()
 
-    const { data: existing } = await supabaseAdmin
-      .from('users')
-      .select('id')
-      .eq('email', email)
-      .single()
-
-    if (existing) {
-      return NextResponse.json({ error: 'Email already exists' }, { status: 400 })
+    if (!email || !password || !name) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      )
     }
 
-    const passwordHash = await hashPassword(password)
+    const db = await getDb()
+    const usersCollection = db.collection('users')
 
-    const { data: user, error } = await supabaseAdmin
-      .from('users')
-      .insert({
-        email,
-        password: passwordHash,
-        name,
-        role: 'user'
-      })
-      .select()
-      .single()
+    const existingUser = await usersCollection.findOne({ email })
+    if (existingUser) {
+      return NextResponse.json(
+        { error: 'User already exists' },
+        { status: 400 }
+      )
+    }
 
-    if (error) throw error
+    const hashedPassword = await bcrypt.hash(password, 10)
 
-    const token = generateToken(user)
-
-    return NextResponse.json({
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role
-      },
-      token
+    const result = await usersCollection.insertOne({
+      email,
+      password: hashedPassword,
+      name,
+      role: 'customer',
+      createdAt: new Date(),
     })
-  } catch {
-    return NextResponse.json({ error: 'Registration failed' }, { status: 500 })
+
+    const user = {
+      id: result.insertedId.toString(),
+      email,
+      name,
+      role: 'customer',
+    }
+
+    return NextResponse.json({ user })
+  } catch (error) {
+    console.error('Registration error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }
