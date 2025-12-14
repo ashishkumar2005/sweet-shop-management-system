@@ -1,47 +1,70 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { supabase, supabaseAdmin } from '@/lib/supabase'
-import { requireAdmin } from '@/lib/middleware'
+import { NextResponse } from 'next/server'
+import { getDb, ObjectId } from '@/lib/mongodb'
 
 export async function GET() {
   try {
-    const { data, error } = await supabase
-      .from('sweets')
-      .select('*')
-      .order('created_at', { ascending: false })
+    const db = await getDb()
+    const sweetsCollection = db.collection('sweets')
+    
+    const sweets = await sweetsCollection.find({}).toArray()
+    
+    const formattedSweets = sweets.map(sweet => ({
+      id: sweet._id.toString(),
+      name: sweet.name,
+      description: sweet.description,
+      price: sweet.price,
+      category: sweet.category,
+      image: sweet.image,
+      quantity: sweet.quantity,
+    }))
 
-    if (error) throw error
-
-    return NextResponse.json({ sweets: data || [] })
-  } catch {
-    return NextResponse.json({ error: 'Failed to fetch sweets' }, { status: 500 })
+    return NextResponse.json({ sweets: formattedSweets })
+  } catch (error) {
+    console.error('Error fetching sweets:', error)
+    return NextResponse.json(
+      { error: 'Failed to fetch sweets' },
+      { status: 500 }
+    )
   }
 }
 
-export async function POST(request: NextRequest) {
-  const authResult = requireAdmin(request)
-  if (authResult instanceof NextResponse) return authResult
-
+export async function POST(request: Request) {
   try {
-    const body = await request.json()
-    const { name, category, price, quantity, image_url, description } = body
+    const sweet = await request.json()
 
-    const { data, error } = await supabaseAdmin
-      .from('sweets')
-      .insert({
-        name,
-        category,
-        price,
-        quantity,
-        image_url,
-        description
-      })
-      .select()
-      .single()
+    if (!sweet.name || !sweet.price || !sweet.category) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      )
+    }
 
-    if (error) throw error
+    const db = await getDb()
+    const sweetsCollection = db.collection('sweets')
 
-    return NextResponse.json({ sweet: data })
-  } catch {
-    return NextResponse.json({ error: 'Failed to create sweet' }, { status: 500 })
+    const result = await sweetsCollection.insertOne({
+      name: sweet.name,
+      description: sweet.description || '',
+      price: parseFloat(sweet.price),
+      category: sweet.category,
+      image: sweet.image || '/placeholder.svg',
+      quantity: parseInt(sweet.quantity) || 0,
+      createdAt: new Date(),
+    })
+
+    const newSweet = {
+      id: result.insertedId.toString(),
+      ...sweet,
+      price: parseFloat(sweet.price),
+      quantity: parseInt(sweet.quantity) || 0,
+    }
+
+    return NextResponse.json(newSweet, { status: 201 })
+  } catch (error) {
+    console.error('Error creating sweet:', error)
+    return NextResponse.json(
+      { error: 'Failed to create sweet' },
+      { status: 500 }
+    )
   }
 }
