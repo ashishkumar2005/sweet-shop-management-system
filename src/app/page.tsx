@@ -1,65 +1,209 @@
-import Image from "next/image";
+"use client"
 
-export default function Home() {
+import { useState, useEffect, useMemo } from "react"
+import { Sweet } from "@/lib/supabase"
+import { Navbar } from "@/components/navbar"
+import { SweetCard } from "@/components/sweet-card"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { Slider } from "@/components/ui/slider"
+import { Search, Filter, X, Loader2 } from "lucide-react"
+import { motion } from "framer-motion"
+
+export default function HomePage() {
+  const [sweets, setSweets] = useState<Sweet[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100])
+  const [showFilters, setShowFilters] = useState(false)
+
+  useEffect(() => {
+    fetchSweets()
+  }, [])
+
+  const fetchSweets = async () => {
+    try {
+      const res = await fetch('/api/sweets')
+      const data = await res.json()
+      setSweets(data.sweets || [])
+    } catch (error) {
+      console.error('Failed to fetch sweets:', error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const categories = useMemo(() => {
+    const cats = [...new Set(sweets.map(s => s.category))]
+    return cats.sort()
+  }, [sweets])
+
+  const maxPrice = useMemo(() => {
+    return Math.max(...sweets.map(s => s.price), 100)
+  }, [sweets])
+
+  const filteredSweets = useMemo(() => {
+    return sweets.filter(sweet => {
+      const matchesSearch = sweet.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        sweet.id.toLowerCase().includes(searchQuery.toLowerCase())
+      const matchesCategory = !selectedCategory || sweet.category === selectedCategory
+      const matchesPrice = sweet.price >= priceRange[0] && sweet.price <= priceRange[1]
+      return matchesSearch && matchesCategory && matchesPrice
+    })
+  }, [sweets, searchQuery, selectedCategory, priceRange])
+
+  const clearFilters = () => {
+    setSearchQuery("")
+    setSelectedCategory(null)
+    setPriceRange([0, maxPrice])
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="min-h-screen bg-gradient-to-b from-background via-secondary/10 to-background">
+      <Navbar />
+      
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=1920&q=80')] bg-cover bg-center opacity-10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-background" />
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <span className="text-6xl mb-4 block">🪷</span>
+            <h1 className="font-display text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary via-orange-500 to-primary bg-clip-text text-transparent">
+              Mithai Mahal
+            </h1>
+            <p className="text-lg text-muted-foreground mb-8">
+              Discover the finest collection of authentic Indian sweets and snacks, 
+              crafted with love and tradition
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="#sweets">
+                <Button size="lg" className="gap-2">
+                  Explore Sweets
+                </Button>
+              </a>
+              <a href="/register">
+                <Button size="lg" variant="outline">
+                  Join Us
+                </Button>
+              </a>
+            </div>
+          </motion.div>
         </div>
-      </main>
+      </section>
+
+      <section id="sweets" className="py-12 container mx-auto px-4">
+        <div className="flex flex-col lg:flex-row gap-6 mb-8">
+          <div className="flex-1">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search by name or ID..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 bg-card/50"
+              />
+            </div>
+          </div>
+          <Button 
+            variant="outline" 
+            className="gap-2 lg:hidden"
+            onClick={() => setShowFilters(!showFilters)}
+          >
+            <Filter className="h-4 w-4" />
+            Filters
+          </Button>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-8">
+          <aside className={`lg:w-64 space-y-6 ${showFilters ? 'block' : 'hidden lg:block'}`}>
+            <div className="bg-card/50 rounded-lg p-4 space-y-4 backdrop-blur border">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold">Filters</h3>
+                <Button variant="ghost" size="sm" onClick={clearFilters}>
+                  <X className="h-4 w-4 mr-1" />
+                  Clear
+                </Button>
+              </div>
+              
+              <div>
+                <h4 className="text-sm font-medium mb-3">Categories</h4>
+                <div className="flex flex-wrap gap-2">
+                  {categories.map(category => (
+                    <Badge
+                      key={category}
+                      variant={selectedCategory === category ? "default" : "outline"}
+                      className="cursor-pointer hover:bg-primary/80 transition-colors"
+                      onClick={() => setSelectedCategory(selectedCategory === category ? null : category)}
+                    >
+                      {category}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-sm font-medium mb-3">
+                  Price Range: ₹{priceRange[0]} - ₹{priceRange[1]}
+                </h4>
+                <Slider
+                  value={priceRange}
+                  onValueChange={(value) => setPriceRange(value as [number, number])}
+                  min={0}
+                  max={maxPrice}
+                  step={5}
+                  className="mt-2"
+                />
+              </div>
+            </div>
+          </aside>
+
+          <main className="flex-1">
+            <div className="flex items-center justify-between mb-6">
+              <p className="text-sm text-muted-foreground">
+                Showing {filteredSweets.length} of {sweets.length} sweets
+              </p>
+            </div>
+
+            {isLoading ? (
+              <div className="flex items-center justify-center py-20">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+            ) : filteredSweets.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-muted-foreground">No sweets found matching your criteria</p>
+                <Button variant="link" onClick={clearFilters}>Clear filters</Button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {filteredSweets.map((sweet, index) => (
+                  <motion.div
+                    key={sweet.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                  >
+                    <SweetCard sweet={sweet} />
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </main>
+        </div>
+      </section>
+
+      <footer className="border-t py-8 mt-12">
+        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
+          <p>© 2024 Mithai Mahal. All rights reserved.</p>
+          <p className="mt-2">Made with love for Indian sweets lovers</p>
+        </div>
+      </footer>
     </div>
-  );
+  )
 }
