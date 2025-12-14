@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useCart } from "@/lib/cart-context"
 import { useAuth } from "@/lib/auth-context"
@@ -12,13 +12,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "sonner"
-import { Loader2, CreditCard, Banknote, CheckCircle2 } from "lucide-react"
+import { Loader2, CreditCard, Banknote, CheckCircle2, AlertCircle } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCart()
-  const { user, token } = useAuth()
+  const auth = useAuth()
   const router = useRouter()
   const [isProcessing, setIsProcessing] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -31,13 +31,48 @@ export default function CheckoutPage() {
     phone: ""
   })
 
+  const user = auth?.user
+  const token = auth?.token
+
+  useEffect(() => {
+    if (items.length === 0 && !isSuccess) {
+      router.push("/cart")
+    }
+  }, [items.length, isSuccess, router])
+
   if (!user) {
-    router.push("/login")
-    return null
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background via-secondary/10 to-background">
+        <Navbar />
+        <div className="container mx-auto px-4 py-20 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-md mx-auto"
+          >
+            <AlertCircle className="h-24 w-24 mx-auto text-orange-500 mb-6" />
+            <h1 className="font-display text-2xl font-bold mb-4">Login Required</h1>
+            <p className="text-muted-foreground mb-8">
+              Please log in to continue with checkout
+            </p>
+            <div className="space-y-3">
+              <Link href="/login">
+                <Button size="lg" className="w-full">Login</Button>
+              </Link>
+              <p className="text-xs text-muted-foreground">
+                Don&apos;t have an account?{" "}
+                <Link href="/register" className="text-primary hover:underline">
+                  Sign up
+                </Link>
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+    )
   }
 
   if (items.length === 0 && !isSuccess) {
-    router.push("/cart")
     return null
   }
 
