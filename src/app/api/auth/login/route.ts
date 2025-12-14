@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import connectDB from '@/lib/mongodb'
+import User from '@/lib/models/User'
 import { verifyPassword, generateToken } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
@@ -13,11 +14,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { data: user } = await supabaseAdmin
-      .from('users')
-      .select('*')
-      .eq('email', email)
-      .single()
+    await connectDB()
+
+    const user = await User.findOne({ email: email.toLowerCase() })
 
     if (!user) {
       return NextResponse.json(
@@ -26,7 +25,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const isValidPassword = await verifyPassword(password, user.password_hash)
+    const isValidPassword = await verifyPassword(password, user.password)
 
     if (!isValidPassword) {
       return NextResponse.json(
@@ -36,7 +35,7 @@ export async function POST(request: NextRequest) {
     }
 
     const token = generateToken({
-      id: user.id,
+      id: user._id.toString(),
       email: user.email,
       name: user.name,
       role: user.role
@@ -44,7 +43,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       user: {
-        id: user.id,
+        id: user._id.toString(),
         email: user.email,
         name: user.name,
         role: user.role

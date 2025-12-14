@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import connectDB from '@/lib/mongodb'
+import User from '@/lib/models/User'
 import { hashPassword, generateToken } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
@@ -20,11 +21,9 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { data: existingUser } = await supabaseAdmin
-      .from('users')
-      .select('id')
-      .eq('email', email)
-      .single()
+    await connectDB()
+
+    const existingUser = await User.findOne({ email: email.toLowerCase() })
 
     if (existingUser) {
       return NextResponse.json(
@@ -35,26 +34,15 @@ export async function POST(request: NextRequest) {
 
     const passwordHash = await hashPassword(password)
 
-    const { data: newUser, error } = await supabaseAdmin
-      .from('users')
-      .insert({
-        email,
-        password_hash: passwordHash,
-        name,
-        role: 'user'
-      })
-      .select()
-      .single()
-
-    if (error) {
-      return NextResponse.json(
-        { error: 'Failed to create user' },
-        { status: 500 }
-      )
-    }
+    const newUser = await User.create({
+      email: email.toLowerCase(),
+      password: passwordHash,
+      name,
+      role: 'user'
+    })
 
     const token = generateToken({
-      id: newUser.id,
+      id: newUser._id.toString(),
       email: newUser.email,
       name: newUser.name,
       role: newUser.role
@@ -62,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       user: {
-        id: newUser.id,
+        id: newUser._id.toString(),
         email: newUser.email,
         name: newUser.name,
         role: newUser.role
