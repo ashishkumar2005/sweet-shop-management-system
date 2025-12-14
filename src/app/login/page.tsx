@@ -88,8 +88,8 @@ export default function LoginPage() {
                 {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 Sign In
               </Button>
-              <div className="flex items-center justify-between w-full text-sm text-muted-foreground">
-                <p>
+              <div className="flex items-center justify-between w-full text-sm">
+                <p className="text-muted-foreground">
                   Don&apos;t have an account?{" "}
                   <Link href="/register" className="text-primary font-medium hover:underline">
                     Sign up
