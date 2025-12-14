@@ -1,7 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { Sweet } from './supabase'
+import { Sweet } from './types'
 
 type CartItem = Sweet & { cartQuantity: number }
 
