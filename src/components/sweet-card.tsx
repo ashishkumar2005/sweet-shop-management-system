@@ -1,7 +1,7 @@
 "use client"
 
 import Image from "next/image"
-import { Sweet } from "@/lib/supabase"
+import { Sweet } from "@/lib/types"
 import { useCart } from "@/lib/cart-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
