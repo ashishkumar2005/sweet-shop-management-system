@@ -27,22 +27,12 @@ export default function LoginPage() {
       await login(email, password)
       const user = JSON.parse(localStorage.getItem('user') || '{}')
       toast.success(`Welcome back, ${user.name}!`)
-      
-      if (user.role === 'admin') {
-        router.push("/admin")
-      } else {
-        router.push("/")
-      }
+      router.push("/")
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Login failed")
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const loginAsAdmin = () => {
-    setEmail("admin@sweetshop.com")
-    setPassword("admin123")
   }
 
   return (
@@ -92,34 +82,24 @@ export default function LoginPage() {
                   </Button>
                 </div>
               </div>
-
-              <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 flex items-start gap-2">
-                <Shield className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
-                <div className="flex-1 space-y-1">
-                  <p className="text-xs font-medium text-primary">Admin Access</p>
-                  <p className="text-xs text-muted-foreground">admin@sweetshop.com / admin123</p>
-                  <Button 
-                    type="button" 
-                    variant="link" 
-                    className="h-auto p-0 text-xs text-primary"
-                    onClick={loginAsAdmin}
-                  >
-                    Auto-fill credentials
-                  </Button>
-                </div>
-              </div>
             </CardContent>
             <CardFooter className="flex flex-col gap-4">
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 Sign In
               </Button>
-              <p className="text-sm text-muted-foreground text-center">
-                Don&apos;t have an account?{" "}
-                <Link href="/register" className="text-primary font-medium hover:underline">
-                  Sign up
+              <div className="flex items-center justify-between w-full text-sm text-muted-foreground">
+                <p>
+                  Don&apos;t have an account?{" "}
+                  <Link href="/register" className="text-primary font-medium hover:underline">
+                    Sign up
+                  </Link>
+                </p>
+                <Link href="/admin/login" className="text-primary font-medium hover:underline flex items-center gap-1">
+                  <Shield className="h-3.5 w-3.5" />
+                  Admin
                 </Link>
-              </p>
+              </div>
             </CardFooter>
           </form>
         </Card>
