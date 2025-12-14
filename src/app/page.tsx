@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo } from "react"
 import { Sweet } from "@/lib/types"
 import { Navbar } from "@/components/navbar"
 import { SweetCard } from "@/components/sweet-card"
+import { FloatingCart } from "@/components/floating-cart"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -197,6 +198,8 @@ export default function HomePage() {
           </main>
         </div>
       </section>
+
+      <FloatingCart />
 
       <footer className="border-t py-8 mt-12">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
