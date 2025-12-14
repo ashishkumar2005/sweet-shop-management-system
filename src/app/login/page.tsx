@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { toast } from "sonner"
 import { Navbar } from "@/components/navbar"
-import { Eye, EyeOff, Loader2 } from "lucide-react"
+import { Eye, EyeOff, Loader2, Shield } from "lucide-react"
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -32,6 +32,11 @@ export default function LoginPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const loginAsAdmin = () => {
+    setEmail("admin@sweetshop.com")
+    setPassword("admin123")
   }
 
   return (
@@ -78,6 +83,22 @@ export default function LoginPage() {
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </Button>
+                </div>
+              </div>
+
+              <div className="bg-primary/10 border border-primary/20 rounded-lg p-3 flex items-start gap-2">
+                <Shield className="h-4 w-4 text-primary mt-0.5 flex-shrink-0" />
+                <div className="flex-1 space-y-1">
+                  <p className="text-xs font-medium text-primary">Admin Access</p>
+                  <p className="text-xs text-muted-foreground">admin@sweetshop.com / admin123</p>
+                  <Button 
+                    type="button" 
+                    variant="link" 
+                    className="h-auto p-0 text-xs text-primary"
+                    onClick={loginAsAdmin}
+                  >
+                    Auto-fill credentials
                   </Button>
                 </div>
               </div>
