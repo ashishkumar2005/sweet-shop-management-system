@@ -25,8 +25,14 @@ export default function LoginPage() {
     setIsLoading(true)
     try {
       await login(email, password)
-      toast.success("Welcome back!")
-      router.push("/")
+      const user = JSON.parse(localStorage.getItem('user') || '{}')
+      toast.success(`Welcome back, ${user.name}!`)
+      
+      if (user.role === 'admin') {
+        router.push("/admin")
+      } else {
+        router.push("/")
+      }
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Login failed")
     } finally {
