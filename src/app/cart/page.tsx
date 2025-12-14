@@ -13,7 +13,8 @@ import { motion } from "framer-motion"
 
 export default function CartPage() {
   const { items, removeFromCart, updateQuantity, total, clearCart } = useCart()
-  const { user } = useAuth()
+  const auth = useAuth()
+  const user = auth?.user
 
   if (items.length === 0) {
     return (
