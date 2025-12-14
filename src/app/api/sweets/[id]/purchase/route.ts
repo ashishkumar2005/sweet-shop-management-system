@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import connectDB from '@/lib/mongodb'
-import Sweet from '@/lib/models/Sweet'
+import { supabaseAdmin } from '@/lib/supabase'
 import { requireAuth } from '@/lib/middleware'
 
 export async function POST(
@@ -12,48 +11,33 @@ export async function POST(
 
   try {
     const { id } = await params
-    const { quantity = 1 } = await request.json()
+    const { quantity } = await request.json()
 
-    await connectDB()
+    const { data: sweet, error: fetchError } = await supabaseAdmin
+      .from('sweets')
+      .select('*')
+      .eq('id', id)
+      .single()
 
-    const sweet = await Sweet.findById(id)
-
-    if (!sweet) {
-      return NextResponse.json(
-        { error: 'Sweet not found' },
-        { status: 404 }
-      )
+    if (fetchError || !sweet) {
+      return NextResponse.json({ error: 'Sweet not found' }, { status: 404 })
     }
 
     if (sweet.quantity < quantity) {
-      return NextResponse.json(
-        { error: 'Insufficient stock' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Insufficient stock' }, { status: 400 })
     }
 
-    sweet.quantity -= quantity
-    await sweet.save()
+    const { data, error } = await supabaseAdmin
+      .from('sweets')
+      .update({ quantity: sweet.quantity - quantity })
+      .eq('id', id)
+      .select()
+      .single()
 
-    const formattedSweet = {
-      id: sweet._id.toString(),
-      name: sweet.name,
-      category: sweet.category,
-      price: sweet.price,
-      quantity: sweet.quantity,
-      image_url: sweet.imageUrl,
-      description: sweet.description,
-      created_at: sweet.createdAt
-    }
+    if (error) throw error
 
-    return NextResponse.json({
-      message: 'Purchase successful',
-      sweet: formattedSweet
-    })
+    return NextResponse.json({ sweet: data })
   } catch {
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Purchase failed' }, { status: 500 })
   }
 }
