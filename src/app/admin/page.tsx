@@ -4,18 +4,17 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/lib/auth-context"
 import { Sweet } from "@/lib/types"
-import { Navbar } from "@/components/navbar"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
-import { Plus, Edit, Trash2, Package, Search, Loader2 } from "lucide-react"
+import { Plus, Edit, Trash2, Package, Search, Loader2, LogOut, TrendingUp, TrendingDown, Box, AlertTriangle } from "lucide-react"
 
 type SweetForm = {
   name: string
@@ -36,7 +35,7 @@ const initialForm: SweetForm = {
 }
 
 export default function AdminPage() {
-  const { user, token, isLoading: authLoading } = useAuth()
+  const { user, token, logout, isLoading: authLoading } = useAuth()
   const router = useRouter()
   const [sweets, setSweets] = useState<Sweet[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -50,7 +49,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (!authLoading && (!user || user.role !== 'admin')) {
-      router.push('/')
+      router.push('/admin/login')
     }
   }, [user, authLoading, router])
 
@@ -163,6 +162,12 @@ export default function AdminPage() {
     }
   }
 
+  const handleLogout = () => {
+    logout()
+    toast.success("Logged out successfully")
+    router.push("/admin/login")
+  }
+
   const filteredSweets = sweets.filter(s =>
     s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     s.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -170,25 +175,45 @@ export default function AdminPage() {
   )
 
   const totalItems = sweets.reduce((sum, s) => sum + s.quantity, 0)
-  const lowStockItems = sweets.filter(s => s.quantity < 20).length
+  const lowStockItems = sweets.filter(s => s.quantity < 20 && s.quantity > 0).length
   const outOfStockItems = sweets.filter(s => s.quantity === 0).length
+  const totalValue = sweets.reduce((sum, s) => sum + (s.price * s.quantity), 0)
 
   if (authLoading || !user || user.role !== 'admin') {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-secondary/10 to-background">
-      <Navbar />
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950">
+      <nav className="border-b border-slate-800 bg-slate-900/50 backdrop-blur-xl">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center">
+                <span className="text-2xl">🪷</span>
+              </div>
+              <div>
+                <h1 className="font-display text-xl font-bold text-white">Mithai Mahal Admin</h1>
+                <p className="text-xs text-slate-400">Welcome, {user.name}</p>
+              </div>
+            </div>
+            <Button variant="ghost" onClick={handleLogout} className="text-slate-300 hover:text-white hover:bg-slate-800">
+              <LogOut className="h-4 w-4 mr-2" />
+              Logout
+            </Button>
+          </div>
+        </div>
+      </nav>
+
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="font-display text-3xl font-bold">Admin Dashboard</h1>
-            <p className="text-muted-foreground">Manage your sweet shop inventory</p>
+            <h2 className="font-display text-2xl font-bold text-white mb-1">Inventory Management</h2>
+            <p className="text-slate-400">Monitor and manage your product catalog</p>
           </div>
           <Dialog open={isDialogOpen} onOpenChange={(open) => {
             setIsDialogOpen(open)
@@ -198,39 +223,41 @@ export default function AdminPage() {
             }
           }}>
             <DialogTrigger asChild>
-              <Button className="gap-2">
+              <Button className="gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
                 <Plus className="h-4 w-4" />
-                Add Sweet
+                Add Product
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-md">
+            <DialogContent className="max-w-md bg-slate-900 border-slate-800">
               <DialogHeader>
-                <DialogTitle className="font-display">
-                  {editingId ? 'Edit Sweet' : 'Add New Sweet'}
+                <DialogTitle className="font-display text-white">
+                  {editingId ? 'Edit Product' : 'Add New Product'}
                 </DialogTitle>
               </DialogHeader>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <Label htmlFor="name">Name *</Label>
+                  <Label htmlFor="name" className="text-slate-200">Name *</Label>
                   <Input
                     id="name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
+                    className="bg-slate-800 border-slate-700 text-white"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="category">Category *</Label>
+                    <Label htmlFor="category" className="text-slate-200">Category *</Label>
                     <Input
                       id="category"
                       value={formData.category}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                       required
+                      className="bg-slate-800 border-slate-700 text-white"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="price">Price (₹) *</Label>
+                    <Label htmlFor="price" className="text-slate-200">Price (₹) *</Label>
                     <Input
                       id="price"
                       type="number"
@@ -238,40 +265,44 @@ export default function AdminPage() {
                       value={formData.price}
                       onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                       required
+                      className="bg-slate-800 border-slate-700 text-white"
                     />
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="quantity">Quantity *</Label>
+                  <Label htmlFor="quantity" className="text-slate-200">Quantity *</Label>
                   <Input
                     id="quantity"
                     type="number"
                     value={formData.quantity}
                     onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
                     required
+                    className="bg-slate-800 border-slate-700 text-white"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="image_url">Image URL</Label>
+                  <Label htmlFor="image_url" className="text-slate-200">Image URL</Label>
                   <Input
                     id="image_url"
                     value={formData.image_url}
                     onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
                     placeholder="https://..."
+                    className="bg-slate-800 border-slate-700 text-white"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description" className="text-slate-200">Description</Label>
                   <Textarea
                     id="description"
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
+                    className="bg-slate-800 border-slate-700 text-white"
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={isSubmitting}>
+                <Button type="submit" className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700" disabled={isSubmitting}>
                   {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-                  {editingId ? 'Update Sweet' : 'Add Sweet'}
+                  {editingId ? 'Update Product' : 'Add Product'}
                 </Button>
               </form>
             </DialogContent>
@@ -279,140 +310,159 @@ export default function AdminPage() {
         </div>
 
         <div className="grid md:grid-cols-4 gap-4 mb-8">
-          <Card className="border-0 shadow-sm bg-card/50">
-            <CardContent className="p-4">
-              <div className="text-sm text-muted-foreground">Total Products</div>
-              <div className="text-2xl font-bold">{sweets.length}</div>
+          <Card className="border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 shadow-xl">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm text-slate-400">Total Products</div>
+                <Box className="h-4 w-4 text-purple-400" />
+              </div>
+              <div className="text-3xl font-bold text-white">{sweets.length}</div>
+              <div className="text-xs text-slate-500 mt-1">Active items</div>
             </CardContent>
           </Card>
-          <Card className="border-0 shadow-sm bg-card/50">
-            <CardContent className="p-4">
-              <div className="text-sm text-muted-foreground">Total Stock</div>
-              <div className="text-2xl font-bold">{totalItems}</div>
+          <Card className="border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 shadow-xl">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm text-slate-400">Total Stock</div>
+                <TrendingUp className="h-4 w-4 text-green-400" />
+              </div>
+              <div className="text-3xl font-bold text-white">{totalItems}</div>
+              <div className="text-xs text-slate-500 mt-1">Units available</div>
             </CardContent>
           </Card>
-          <Card className="border-0 shadow-sm bg-card/50">
-            <CardContent className="p-4">
-              <div className="text-sm text-muted-foreground">Low Stock</div>
-              <div className="text-2xl font-bold text-yellow-600">{lowStockItems}</div>
+          <Card className="border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 shadow-xl">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm text-slate-400">Low Stock</div>
+                <AlertTriangle className="h-4 w-4 text-yellow-400" />
+              </div>
+              <div className="text-3xl font-bold text-yellow-400">{lowStockItems}</div>
+              <div className="text-xs text-slate-500 mt-1">Needs attention</div>
             </CardContent>
           </Card>
-          <Card className="border-0 shadow-sm bg-card/50">
-            <CardContent className="p-4">
-              <div className="text-sm text-muted-foreground">Out of Stock</div>
-              <div className="text-2xl font-bold text-destructive">{outOfStockItems}</div>
+          <Card className="border-slate-800 bg-gradient-to-br from-slate-900 to-slate-800 shadow-xl">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-2">
+                <div className="text-sm text-slate-400">Out of Stock</div>
+                <TrendingDown className="h-4 w-4 text-red-400" />
+              </div>
+              <div className="text-3xl font-bold text-red-400">{outOfStockItems}</div>
+              <div className="text-xs text-slate-500 mt-1">Requires restock</div>
             </CardContent>
           </Card>
         </div>
 
         <Tabs defaultValue="all" className="space-y-4">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            <TabsList>
-              <TabsTrigger value="all">All ({sweets.length})</TabsTrigger>
-              <TabsTrigger value="low">Low Stock ({lowStockItems})</TabsTrigger>
-              <TabsTrigger value="out">Out of Stock ({outOfStockItems})</TabsTrigger>
+            <TabsList className="bg-slate-900/50 border border-slate-800">
+              <TabsTrigger value="all" className="data-[state=active]:bg-purple-600">All ({sweets.length})</TabsTrigger>
+              <TabsTrigger value="low" className="data-[state=active]:bg-purple-600">Low Stock ({lowStockItems})</TabsTrigger>
+              <TabsTrigger value="out" className="data-[state=active]:bg-purple-600">Out of Stock ({outOfStockItems})</TabsTrigger>
             </TabsList>
-            <div className="relative w-full sm:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <div className="relative w-full sm:w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
               <Input
-                placeholder="Search sweets..."
+                placeholder="Search products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 bg-slate-900 border-slate-800 text-white placeholder:text-slate-500"
               />
             </div>
           </div>
 
           {['all', 'low', 'out'].map(tab => (
             <TabsContent key={tab} value={tab}>
-              <Card className="border-0 shadow-sm">
+              <Card className="border-slate-800 bg-slate-900/50 backdrop-blur shadow-xl">
                 <CardContent className="p-0">
                   {isLoading ? (
                     <div className="flex items-center justify-center py-20">
-                      <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                      <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
                     </div>
                   ) : (
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead>Sweet</TableHead>
-                          <TableHead>Category</TableHead>
-                          <TableHead>Price</TableHead>
-                          <TableHead>Stock</TableHead>
-                          <TableHead className="text-right">Actions</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {filteredSweets
-                          .filter(s => {
-                            if (tab === 'low') return s.quantity > 0 && s.quantity < 20
-                            if (tab === 'out') return s.quantity === 0
-                            return true
-                          })
-                          .map(sweet => (
-                            <TableRow key={sweet.id}>
-                              <TableCell>
-                                <div>
-                                  <div className="font-medium">{sweet.name}</div>
-                                  <div className="text-xs text-muted-foreground">{sweet.id.slice(0, 8)}...</div>
-                                </div>
-                              </TableCell>
-                              <TableCell>
-                                <Badge variant="outline">{sweet.category}</Badge>
-                              </TableCell>
-                              <TableCell>₹{sweet.price}</TableCell>
-                              <TableCell>
-                                {restockId === sweet.id ? (
-                                  <div className="flex items-center gap-2">
-                                    <Input
-                                      type="number"
-                                      value={restockQuantity}
-                                      onChange={(e) => setRestockQuantity(e.target.value)}
-                                      className="w-20 h-8"
-                                      placeholder="Qty"
-                                    />
-                                    <Button size="sm" onClick={() => handleRestock(sweet.id)}>Add</Button>
-                                    <Button size="sm" variant="ghost" onClick={() => setRestockId(null)}>Cancel</Button>
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="border-slate-800 hover:bg-slate-800/50">
+                            <TableHead className="text-slate-300">Product</TableHead>
+                            <TableHead className="text-slate-300">Category</TableHead>
+                            <TableHead className="text-slate-300">Price</TableHead>
+                            <TableHead className="text-slate-300">Stock</TableHead>
+                            <TableHead className="text-right text-slate-300">Actions</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {filteredSweets
+                            .filter(s => {
+                              if (tab === 'low') return s.quantity > 0 && s.quantity < 20
+                              if (tab === 'out') return s.quantity === 0
+                              return true
+                            })
+                            .map(sweet => (
+                              <TableRow key={sweet.id} className="border-slate-800 hover:bg-slate-800/30">
+                                <TableCell>
+                                  <div>
+                                    <div className="font-medium text-white">{sweet.name}</div>
+                                    <div className="text-xs text-slate-500">{sweet.id.slice(0, 8)}...</div>
                                   </div>
-                                ) : (
-                                  <div className="flex items-center gap-2">
-                                    <Badge variant={sweet.quantity === 0 ? 'destructive' : sweet.quantity < 20 ? 'secondary' : 'default'}>
-                                      {sweet.quantity}
-                                    </Badge>
+                                </TableCell>
+                                <TableCell>
+                                  <Badge variant="outline" className="border-purple-500/30 text-purple-300">{sweet.category}</Badge>
+                                </TableCell>
+                                <TableCell className="text-slate-300">₹{sweet.price}</TableCell>
+                                <TableCell>
+                                  {restockId === sweet.id ? (
+                                    <div className="flex items-center gap-2">
+                                      <Input
+                                        type="number"
+                                        value={restockQuantity}
+                                        onChange={(e) => setRestockQuantity(e.target.value)}
+                                        className="w-20 h-8 bg-slate-800 border-slate-700 text-white"
+                                        placeholder="Qty"
+                                      />
+                                      <Button size="sm" onClick={() => handleRestock(sweet.id)} className="bg-purple-600 hover:bg-purple-700">Add</Button>
+                                      <Button size="sm" variant="ghost" onClick={() => setRestockId(null)} className="text-slate-400">Cancel</Button>
+                                    </div>
+                                  ) : (
+                                    <div className="flex items-center gap-2">
+                                      <Badge variant={sweet.quantity === 0 ? 'destructive' : sweet.quantity < 20 ? 'secondary' : 'default'}>
+                                        {sweet.quantity}
+                                      </Badge>
+                                      <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        onClick={() => setRestockId(sweet.id)}
+                                        className="h-6 px-2 text-slate-400 hover:text-white"
+                                      >
+                                        <Package className="h-3 w-3" />
+                                      </Button>
+                                    </div>
+                                  )}
+                                </TableCell>
+                                <TableCell className="text-right">
+                                  <div className="flex items-center justify-end gap-2">
                                     <Button
-                                      size="sm"
+                                      size="icon"
                                       variant="ghost"
-                                      onClick={() => setRestockId(sweet.id)}
-                                      className="h-6 px-2"
+                                      onClick={() => handleEdit(sweet)}
+                                      className="h-8 w-8 text-slate-400 hover:text-white hover:bg-slate-800"
                                     >
-                                      <Package className="h-3 w-3" />
+                                      <Edit className="h-4 w-4" />
+                                    </Button>
+                                    <Button
+                                      size="icon"
+                                      variant="ghost"
+                                      className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-950/30"
+                                      onClick={() => handleDelete(sweet.id)}
+                                    >
+                                      <Trash2 className="h-4 w-4" />
                                     </Button>
                                   </div>
-                                )}
-                              </TableCell>
-                              <TableCell className="text-right">
-                                <div className="flex items-center justify-end gap-2">
-                                  <Button
-                                    size="icon"
-                                    variant="ghost"
-                                    onClick={() => handleEdit(sweet)}
-                                  >
-                                    <Edit className="h-4 w-4" />
-                                  </Button>
-                                  <Button
-                                    size="icon"
-                                    variant="ghost"
-                                    className="text-destructive"
-                                    onClick={() => handleDelete(sweet.id)}
-                                  >
-                                    <Trash2 className="h-4 w-4" />
-                                  </Button>
-                                </div>
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                      </TableBody>
-                    </Table>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                        </TableBody>
+                      </Table>
+                    </div>
                   )}
                 </CardContent>
               </Card>
