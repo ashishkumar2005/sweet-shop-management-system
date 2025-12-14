@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { connectToDatabase } from '@/lib/mongodb'
+import { getDb } from '@/lib/mongodb'
 
 const indianSweets = [
   { name: "Gulab Jamun", category: "Syrupy Sweet", price: 120, quantity: 50, image_url: "https://www.vegrecipesofindia.com/wp-content/uploads/2015/07/gulab-jamun-1.jpg", description: "Soft milk-solid balls soaked in rose-cardamom syrup" },
@@ -59,7 +59,7 @@ const indianSweets = [
 
 export async function POST() {
   try {
-    const { db } = await connectToDatabase()
+    const db = await getDb()
     
     await db.collection('sweets').deleteMany({})
     
