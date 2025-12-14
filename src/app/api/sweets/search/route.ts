@@ -1,56 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
-import connectDB from '@/lib/mongodb'
-import Sweet from '@/lib/models/Sweet'
+import { supabase } from '@/lib/supabase'
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
-    const name = searchParams.get('name')
-    const category = searchParams.get('category')
-    const minPrice = searchParams.get('minPrice')
-    const maxPrice = searchParams.get('maxPrice')
-    const id = searchParams.get('id')
+    const searchParams = request.nextUrl.searchParams
+    const query = searchParams.get('q') || ''
 
-    await connectDB()
+    const { data, error } = await supabase
+      .from('sweets')
+      .select('*')
+      .or(`name.ilike.%${query}%,category.ilike.%${query}%,description.ilike.%${query}%`)
+      .order('created_at', { ascending: false })
 
-    const query: any = {}
+    if (error) throw error
 
-    if (id) {
-      query._id = id
-    }
-
-    if (name) {
-      query.name = { $regex: name, $options: 'i' }
-    }
-
-    if (category) {
-      query.category = { $regex: category, $options: 'i' }
-    }
-
-    if (minPrice || maxPrice) {
-      query.price = {}
-      if (minPrice) query.price.$gte = parseFloat(minPrice)
-      if (maxPrice) query.price.$lte = parseFloat(maxPrice)
-    }
-
-    const sweets = await Sweet.find(query).sort({ name: 1 }).lean()
-
-    const formattedSweets = sweets.map((sweet) => ({
-      id: sweet._id.toString(),
-      name: sweet.name,
-      category: sweet.category,
-      price: sweet.price,
-      quantity: sweet.quantity,
-      image_url: sweet.imageUrl,
-      description: sweet.description,
-      created_at: sweet.createdAt
-    }))
-
-    return NextResponse.json({ sweets: formattedSweets })
+    return NextResponse.json({ sweets: data || [] })
   } catch {
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Search failed' }, { status: 500 })
   }
 }
