@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getDb, ObjectId } from '@/lib/mongodb'
+import { normalizeSweet } from '@/lib/image-urls'
 
 export async function GET() {
   try {
@@ -8,7 +9,7 @@ export async function GET() {
     
     const sweets = await sweetsCollection.find({}).toArray()
     
-    const formattedSweets = sweets.map(sweet => ({
+    const formattedSweets = sweets.map(sweet => normalizeSweet({
       id: sweet._id.toString(),
       name: sweet.name,
       description: sweet.description,
