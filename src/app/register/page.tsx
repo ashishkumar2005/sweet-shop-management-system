@@ -73,9 +73,9 @@ export default function RegisterPage() {
       setOtpExpiry(expiryDate)
       setTimeRemaining(Math.floor((expiryDate.getTime() - Date.now()) / 1000))
 
-      toast.success("OTP sent! Check console for the code.", {
-        description: `Code: ${data.otp}`,
-        duration: 10000,
+      toast.success("OTP sent to your email!", {
+        description: "Please check your inbox and enter the code below.",
+        duration: 5000,
       })
       
       setStep("otp")
@@ -145,9 +145,9 @@ export default function RegisterPage() {
       setOtpExpiry(expiryDate)
       setTimeRemaining(Math.floor((expiryDate.getTime() - Date.now()) / 1000))
 
-      toast.success("New OTP sent!", {
-        description: `Code: ${data.otp}`,
-        duration: 10000,
+      toast.success("New OTP sent to your email!", {
+        description: "Please check your inbox for the new code.",
+        duration: 5000,
       })
 
       const timer = setInterval(() => {
@@ -273,7 +273,7 @@ export default function RegisterPage() {
                         </>
                       )}
                     </Button>
-                    <p className="text-sm text-muted-foreground text-center">
+                    <p className="text-sm text-muted-foreground text-center w-full">
                       Already have an account?{" "}
                       <Link href="/login" className="text-primary font-medium hover:underline">
                         Sign in
@@ -348,7 +348,7 @@ export default function RegisterPage() {
                     </Button>
                   </div>
                 </CardContent>
-                <CardFooter>
+                <CardFooter className="pt-0">
                   <Button
                     type="button"
                     variant="outline"
