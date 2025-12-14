@@ -80,10 +80,14 @@ export function SweetCard({ sweet }: { sweet: Sweet }) {
                 size="sm" 
                 onClick={handleAddToCart}
                 disabled={isOutOfStock}
-                className="gap-1"
+                className="gap-1 text-xs"
               >
-                <ShoppingCart className="h-4 w-4" />
-                Add
+                {isOutOfStock ? "Item Unavailable" : (
+                  <>
+                    <ShoppingCart className="h-4 w-4" />
+                    Add
+                  </>
+                )}
               </Button>
             )}
           </div>
