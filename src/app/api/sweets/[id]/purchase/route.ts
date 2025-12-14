@@ -7,11 +7,18 @@ export async function POST(
 ) {
   try {
     const { id } = await params
-    const { quantity } = await request.json()
+    const { quantity, userEmail } = await request.json()
 
     if (!quantity || quantity <= 0) {
       return NextResponse.json(
         { error: 'Invalid quantity' },
+        { status: 400 }
+      )
+    }
+
+    if (!userEmail) {
+      return NextResponse.json(
+        { error: 'User email required' },
         { status: 400 }
       )
     }
@@ -46,6 +53,19 @@ export async function POST(
         { status: 500 }
       )
     }
+
+    const ordersCollection = db.collection('orders')
+    await ordersCollection.insertOne({
+      userEmail,
+      sweetId: id,
+      sweetName: sweet.name,
+      sweetImage: sweet.image,
+      sweetPrice: sweet.price,
+      quantity,
+      totalPrice: sweet.price * quantity,
+      orderDate: new Date(),
+      status: 'completed'
+    })
 
     const updatedSweet = await sweetsCollection.findOne({ _id: new ObjectId(id) })
 
