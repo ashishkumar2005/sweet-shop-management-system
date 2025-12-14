@@ -1,40 +1,34 @@
-import mongoose from 'mongoose'
+import { MongoClient, Db, ObjectId } from 'mongodb'
 
-const MONGODB_URI = process.env.MONGODB_URI!
-
-if (!MONGODB_URI) {
-  throw new Error('Please define the MONGODB_URI environment variable')
+if (!process.env.MONGODB_URI) {
+  throw new Error('Please add your MongoDB URI to .env.local')
 }
 
-let cached = (global as any).mongoose
+const uri = process.env.MONGODB_URI
+const options = {}
 
-if (!cached) {
-  cached = (global as any).mongoose = { conn: null, promise: null }
+let client: MongoClient
+let clientPromise: Promise<MongoClient>
+
+if (process.env.NODE_ENV === 'development') {
+  let globalWithMongo = global as typeof globalThis & {
+    _mongoClientPromise?: Promise<MongoClient>
+  }
+
+  if (!globalWithMongo._mongoClientPromise) {
+    client = new MongoClient(uri, options)
+    globalWithMongo._mongoClientPromise = client.connect()
+  }
+  clientPromise = globalWithMongo._mongoClientPromise
+} else {
+  client = new MongoClient(uri, options)
+  clientPromise = client.connect()
 }
 
-async function connectDB() {
-  if (cached.conn) {
-    return cached.conn
-  }
-
-  if (!cached.promise) {
-    const opts = {
-      bufferCommands: false,
-    }
-
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
-      return mongoose
-    })
-  }
-
-  try {
-    cached.conn = await cached.promise
-  } catch (e) {
-    cached.promise = null
-    throw e
-  }
-
-  return cached.conn
+export async function getDb(): Promise<Db> {
+  const client = await clientPromise
+  return client.db('mithai_mahal')
 }
 
-export default connectDB
+export { ObjectId }
+export default clientPromise
