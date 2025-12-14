@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/lib/auth-context"
+import { Sweet } from "@/lib/types"
 import { Sweet } from "@/lib/supabase"
 import { Navbar } from "@/components/navbar"
 import { Button } from "@/components/ui/button"
