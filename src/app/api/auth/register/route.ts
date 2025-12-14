@@ -1,66 +1,48 @@
 import { NextRequest, NextResponse } from 'next/server'
-import connectDB from '@/lib/mongodb'
-import User from '@/lib/models/User'
-import { hashPassword, generateToken } from '@/lib/auth'
+import { supabaseAdmin } from '@/lib/supabase'
+import { generateToken, hashPassword } from '@/lib/auth'
 
 export async function POST(request: NextRequest) {
   try {
     const { email, password, name } = await request.json()
 
-    if (!email || !password || !name) {
-      return NextResponse.json(
-        { error: 'Email, password, and name are required' },
-        { status: 400 }
-      )
-    }
+    const { data: existing } = await supabaseAdmin
+      .from('users')
+      .select('id')
+      .eq('email', email)
+      .single()
 
-    if (password.length < 6) {
-      return NextResponse.json(
-        { error: 'Password must be at least 6 characters' },
-        { status: 400 }
-      )
-    }
-
-    await connectDB()
-
-    const existingUser = await User.findOne({ email: email.toLowerCase() })
-
-    if (existingUser) {
-      return NextResponse.json(
-        { error: 'User with this email already exists' },
-        { status: 409 }
-      )
+    if (existing) {
+      return NextResponse.json({ error: 'Email already exists' }, { status: 400 })
     }
 
     const passwordHash = await hashPassword(password)
 
-    const newUser = await User.create({
-      email: email.toLowerCase(),
-      password: passwordHash,
-      name,
-      role: 'user'
-    })
+    const { data: user, error } = await supabaseAdmin
+      .from('users')
+      .insert({
+        email,
+        password: passwordHash,
+        name,
+        role: 'user'
+      })
+      .select()
+      .single()
 
-    const token = generateToken({
-      id: newUser._id.toString(),
-      email: newUser.email,
-      name: newUser.name,
-      role: newUser.role
-    })
+    if (error) throw error
+
+    const token = generateToken(user)
 
     return NextResponse.json({
       user: {
-        id: newUser._id.toString(),
-        email: newUser.email,
-        name: newUser.name,
-        role: newUser.role
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role
       },
       token
     })
   } catch {
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Registration failed' }, { status: 500 })
   }
 }
