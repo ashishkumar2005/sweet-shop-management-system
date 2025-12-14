@@ -1,7 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { useCart } from "@/lib/cart-context"
 import { useAuth } from "@/lib/auth-context"
 import { Navbar } from "@/components/navbar"
@@ -12,14 +11,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { toast } from "sonner"
-import { Loader2, CreditCard, Banknote, CheckCircle2, AlertCircle } from "lucide-react"
+import { Loader2, CreditCard, Banknote, CheckCircle2, AlertCircle, ShoppingBag } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 
 export default function CheckoutPage() {
   const { items, total, clearCart } = useCart()
   const auth = useAuth()
-  const router = useRouter()
   const [isProcessing, setIsProcessing] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState("card")
@@ -33,12 +31,6 @@ export default function CheckoutPage() {
 
   const user = auth?.user
   const token = auth?.token
-
-  useEffect(() => {
-    if (items.length === 0 && !isSuccess) {
-      router.push("/cart")
-    }
-  }, [items.length, isSuccess, router])
 
   if (!user) {
     return (
@@ -73,7 +65,27 @@ export default function CheckoutPage() {
   }
 
   if (items.length === 0 && !isSuccess) {
-    return null
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background via-secondary/10 to-background">
+        <Navbar />
+        <div className="container mx-auto px-4 py-20 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="max-w-md mx-auto"
+          >
+            <ShoppingBag className="h-24 w-24 mx-auto text-muted-foreground/50 mb-6" />
+            <h1 className="font-display text-2xl font-bold mb-4">Your cart is empty</h1>
+            <p className="text-muted-foreground mb-8">
+              Add some items to your cart before checking out.
+            </p>
+            <Link href="/">
+              <Button size="lg">Browse Sweets</Button>
+            </Link>
+          </motion.div>
+        </div>
+      </div>
+    )
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
