@@ -1,31 +1,27 @@
 import { NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import connectDB from '@/lib/mongodb'
+import User from '@/lib/models/User'
 import { hashPassword } from '@/lib/auth'
 
 export async function POST() {
   try {
+    await connectDB()
+    
     const passwordHash = await hashPassword('admin123')
 
-    const { data: existingUser } = await supabaseAdmin
-      .from('users')
-      .select('id')
-      .eq('email', 'admin@sweetshop.com')
-      .single()
+    const existingUser = await User.findOne({ email: 'admin@sweetshop.com' })
 
     if (existingUser) {
-      await supabaseAdmin
-        .from('users')
-        .update({ password_hash: passwordHash, role: 'admin' })
-        .eq('email', 'admin@sweetshop.com')
+      existingUser.password = passwordHash
+      existingUser.role = 'admin'
+      await existingUser.save()
     } else {
-      await supabaseAdmin
-        .from('users')
-        .insert({
-          email: 'admin@sweetshop.com',
-          password_hash: passwordHash,
-          name: 'Admin User',
-          role: 'admin'
-        })
+      await User.create({
+        email: 'admin@sweetshop.com',
+        password: passwordHash,
+        name: 'Admin User',
+        role: 'admin'
+      })
     }
 
     return NextResponse.json({ message: 'Admin user created/updated successfully' })
