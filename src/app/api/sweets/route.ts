@@ -1,22 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import connectDB from '@/lib/mongodb'
+import Sweet from '@/lib/models/Sweet'
 import { requireAuth } from '@/lib/middleware'
 
 export async function GET() {
   try {
-    const { data: sweets, error } = await supabaseAdmin
-      .from('sweets')
-      .select('*')
-      .order('name')
+    await connectDB()
 
-    if (error) {
-      return NextResponse.json(
-        { error: 'Failed to fetch sweets' },
-        { status: 500 }
-      )
-    }
+    const sweets = await Sweet.find().sort({ name: 1 }).lean()
 
-    return NextResponse.json({ sweets })
+    const formattedSweets = sweets.map((sweet) => ({
+      id: sweet._id.toString(),
+      name: sweet.name,
+      category: sweet.category,
+      price: sweet.price,
+      quantity: sweet.quantity,
+      image_url: sweet.imageUrl,
+      description: sweet.description,
+      created_at: sweet.createdAt
+    }))
+
+    return NextResponse.json({ sweets: formattedSweets })
   } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -39,27 +43,29 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { data: sweet, error } = await supabaseAdmin
-      .from('sweets')
-      .insert({
-        name,
-        category,
-        price: parseFloat(price),
-        quantity: quantity || 0,
-        image_url: image_url || `https://source.unsplash.com/400x300/?${encodeURIComponent(name)},indian,sweet`,
-        description: description || ''
-      })
-      .select()
-      .single()
+    await connectDB()
 
-    if (error) {
-      return NextResponse.json(
-        { error: 'Failed to create sweet' },
-        { status: 500 }
-      )
+    const sweet = await Sweet.create({
+      name,
+      category,
+      price: parseFloat(price),
+      quantity: quantity || 0,
+      imageUrl: image_url || `https://source.unsplash.com/400x300/?${encodeURIComponent(name)},indian,sweet`,
+      description: description || ''
+    })
+
+    const formattedSweet = {
+      id: sweet._id.toString(),
+      name: sweet.name,
+      category: sweet.category,
+      price: sweet.price,
+      quantity: sweet.quantity,
+      image_url: sweet.imageUrl,
+      description: sweet.description,
+      created_at: sweet.createdAt
     }
 
-    return NextResponse.json({ sweet }, { status: 201 })
+    return NextResponse.json({ sweet: formattedSweet }, { status: 201 })
   } catch {
     return NextResponse.json(
       { error: 'Internal server error' },

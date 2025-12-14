@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import connectDB from '@/lib/mongodb'
+import Sweet from '@/lib/models/Sweet'
 import { requireAuth } from '@/lib/middleware'
 
 export async function POST(
@@ -13,13 +14,11 @@ export async function POST(
     const { id } = await params
     const { quantity = 1 } = await request.json()
 
-    const { data: sweet, error: fetchError } = await supabaseAdmin
-      .from('sweets')
-      .select('*')
-      .eq('id', id)
-      .single()
+    await connectDB()
 
-    if (fetchError || !sweet) {
+    const sweet = await Sweet.findById(id)
+
+    if (!sweet) {
       return NextResponse.json(
         { error: 'Sweet not found' },
         { status: 404 }
@@ -33,23 +32,23 @@ export async function POST(
       )
     }
 
-    const { data: updatedSweet, error: updateError } = await supabaseAdmin
-      .from('sweets')
-      .update({ quantity: sweet.quantity - quantity })
-      .eq('id', id)
-      .select()
-      .single()
+    sweet.quantity -= quantity
+    await sweet.save()
 
-    if (updateError) {
-      return NextResponse.json(
-        { error: 'Failed to process purchase' },
-        { status: 500 }
-      )
+    const formattedSweet = {
+      id: sweet._id.toString(),
+      name: sweet.name,
+      category: sweet.category,
+      price: sweet.price,
+      quantity: sweet.quantity,
+      image_url: sweet.imageUrl,
+      description: sweet.description,
+      created_at: sweet.createdAt
     }
 
     return NextResponse.json({
       message: 'Purchase successful',
-      sweet: updatedSweet
+      sweet: formattedSweet
     })
   } catch {
     return NextResponse.json(

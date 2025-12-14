@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
+import connectDB from '@/lib/mongodb'
+import Sweet from '@/lib/models/Sweet'
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,38 +11,42 @@ export async function GET(request: NextRequest) {
     const maxPrice = searchParams.get('maxPrice')
     const id = searchParams.get('id')
 
-    let query = supabaseAdmin.from('sweets').select('*')
+    await connectDB()
+
+    const query: any = {}
 
     if (id) {
-      query = query.eq('id', id)
+      query._id = id
     }
 
     if (name) {
-      query = query.ilike('name', `%${name}%`)
+      query.name = { $regex: name, $options: 'i' }
     }
 
     if (category) {
-      query = query.ilike('category', `%${category}%`)
+      query.category = { $regex: category, $options: 'i' }
     }
 
-    if (minPrice) {
-      query = query.gte('price', parseFloat(minPrice))
+    if (minPrice || maxPrice) {
+      query.price = {}
+      if (minPrice) query.price.$gte = parseFloat(minPrice)
+      if (maxPrice) query.price.$lte = parseFloat(maxPrice)
     }
 
-    if (maxPrice) {
-      query = query.lte('price', parseFloat(maxPrice))
-    }
+    const sweets = await Sweet.find(query).sort({ name: 1 }).lean()
 
-    const { data: sweets, error } = await query.order('name')
+    const formattedSweets = sweets.map((sweet) => ({
+      id: sweet._id.toString(),
+      name: sweet.name,
+      category: sweet.category,
+      price: sweet.price,
+      quantity: sweet.quantity,
+      image_url: sweet.imageUrl,
+      description: sweet.description,
+      created_at: sweet.createdAt
+    }))
 
-    if (error) {
-      return NextResponse.json(
-        { error: 'Failed to search sweets' },
-        { status: 500 }
-      )
-    }
-
-    return NextResponse.json({ sweets })
+    return NextResponse.json({ sweets: formattedSweets })
   } catch {
     return NextResponse.json(
       { error: 'Internal server error' },
