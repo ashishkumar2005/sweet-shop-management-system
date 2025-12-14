@@ -47,6 +47,11 @@ export function Navbar() {
             <Link href="/#sweets" className="text-sm font-medium hover:text-primary transition-colors">
               Sweets
             </Link>
+            {user && (
+              <Link href="/orders" className="text-sm font-medium hover:text-primary transition-colors">
+                Orders
+              </Link>
+            )}
             {user?.role === 'admin' && (
               <Link href="/admin" className="text-sm font-medium hover:text-primary transition-colors">
                 Admin
@@ -125,6 +130,11 @@ export function Navbar() {
               <Link href="/#sweets" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium py-2">
                 Sweets
               </Link>
+              {user && (
+                <Link href="/orders" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium py-2">
+                  Orders
+                </Link>
+              )}
               {user?.role === 'admin' && (
                 <Link href="/admin" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium py-2">
                   Admin Dashboard
