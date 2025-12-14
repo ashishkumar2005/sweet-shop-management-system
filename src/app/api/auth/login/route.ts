@@ -1,38 +1,50 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { supabaseAdmin } from '@/lib/supabase'
-import { generateToken, verifyPassword } from '@/lib/auth'
+import { NextResponse } from 'next/server'
+import { getDb } from '@/lib/mongodb'
+import bcrypt from 'bcryptjs'
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const { email, password } = await request.json()
 
-    const { data: user, error } = await supabaseAdmin
-      .from('users')
-      .select('*')
-      .eq('email', email)
-      .single()
-
-    if (error || !user) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+    if (!email || !password) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      )
     }
 
-    const isValid = await verifyPassword(password, user.password)
-    if (!isValid) {
-      return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 })
+    const db = await getDb()
+    const usersCollection = db.collection('users')
+
+    const user = await usersCollection.findOne({ email })
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Invalid credentials' },
+        { status: 401 }
+      )
     }
 
-    const token = generateToken(user)
+    const isPasswordValid = await bcrypt.compare(password, user.password)
+    if (!isPasswordValid) {
+      return NextResponse.json(
+        { error: 'Invalid credentials' },
+        { status: 401 }
+      )
+    }
 
-    return NextResponse.json({
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role
-      },
-      token
-    })
-  } catch {
-    return NextResponse.json({ error: 'Login failed' }, { status: 500 })
+    const userData = {
+      id: user._id.toString(),
+      email: user.email,
+      name: user.name,
+      role: user.role,
+    }
+
+    return NextResponse.json({ user: userData })
+  } catch (error) {
+    console.error('Login error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

@@ -1,21 +1,47 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { NextResponse } from 'next/server'
+import { getDb } from '@/lib/mongodb'
 
-export async function GET(request: NextRequest) {
+export async function GET(request: Request) {
   try {
-    const searchParams = request.nextUrl.searchParams
-    const query = searchParams.get('q') || ''
+    const { searchParams } = new URL(request.url)
+    const query = searchParams.get('q')
 
-    const { data, error } = await supabase
-      .from('sweets')
-      .select('*')
-      .or(`name.ilike.%${query}%,category.ilike.%${query}%,description.ilike.%${query}%`)
-      .order('created_at', { ascending: false })
+    if (!query) {
+      return NextResponse.json(
+        { error: 'Search query is required' },
+        { status: 400 }
+      )
+    }
 
-    if (error) throw error
+    const db = await getDb()
+    const sweetsCollection = db.collection('sweets')
 
-    return NextResponse.json({ sweets: data || [] })
-  } catch {
-    return NextResponse.json({ error: 'Search failed' }, { status: 500 })
+    const sweets = await sweetsCollection
+      .find({
+        $or: [
+          { name: { $regex: query, $options: 'i' } },
+          { description: { $regex: query, $options: 'i' } },
+          { category: { $regex: query, $options: 'i' } },
+        ],
+      })
+      .toArray()
+
+    const formattedSweets = sweets.map(sweet => ({
+      id: sweet._id.toString(),
+      name: sweet.name,
+      description: sweet.description,
+      price: sweet.price,
+      category: sweet.category,
+      image: sweet.image,
+      quantity: sweet.quantity,
+    }))
+
+    return NextResponse.json({ sweets: formattedSweets })
+  } catch (error) {
+    console.error('Error searching sweets:', error)
+    return NextResponse.json(
+      { error: 'Failed to search sweets' },
+      { status: 500 }
+    )
   }
 }
