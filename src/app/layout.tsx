@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import VisualEditsMessenger from "../visual-edits/VisualEditsMessenger";
-import ErrorReporter from "@/components/ErrorReporter";
 import Script from "next/script";
 import { Providers } from "@/components/providers";
 
@@ -24,7 +22,6 @@ export default function RootLayout({
           strategy="afterInteractive"
           data-orchids-project-id="3f66b6a9-ebed-4008-a4f6-ed79527dd187"
         />
-        <ErrorReporter />
         <Script
           src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts//route-messenger.js"
           strategy="afterInteractive"
@@ -36,7 +33,6 @@ export default function RootLayout({
           data-custom-data='{"appName": "YourApp", "version": "1.0.0", "greeting": "hi"}'
         />
         <Providers>{children}</Providers>
-        <VisualEditsMessenger />
       </body>
     </html>
   );
