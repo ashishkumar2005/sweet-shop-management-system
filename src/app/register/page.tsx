@@ -16,7 +16,6 @@ export default function RegisterPage() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const { register } = useAuth()
@@ -24,18 +23,10 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match")
-      return
-    }
-    if (password.length < 6) {
-      toast.error("Password must be at least 6 characters")
-      return
-    }
     setIsLoading(true)
     try {
       await register(email, password, name)
-      toast.success("Account created successfully!")
+      toast.success(`Welcome, ${name}! Your account has been created.`)
       router.push("/")
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Registration failed")
