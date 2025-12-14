@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -66,13 +67,13 @@ export default function RegisterPage() {
         >
           <Card className="w-full max-w-md border-0 shadow-xl bg-card/80 backdrop-blur">
             <CardHeader className="text-center space-y-2">
-              <motion.span 
-                className="text-4xl mb-2"
+              <motion.div 
+                className="flex justify-center mb-2"
                 animate={{ rotate: [0, 10, -10, 0] }}
                 transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
               >
-                🪷
-              </motion.span>
+                <Image src="/mithai-icon.png" alt="Mithai Mahal" width={48} height={48} className="object-contain" />
+              </motion.div>
               <CardTitle className="font-display text-2xl">Create Account</CardTitle>
               <CardDescription>Join Mithai Mahal for sweet delights</CardDescription>
             </CardHeader>
