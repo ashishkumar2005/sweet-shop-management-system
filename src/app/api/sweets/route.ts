@@ -14,7 +14,7 @@ export async function GET() {
       description: sweet.description,
       price: sweet.price,
       category: sweet.category,
-      image: sweet.image,
+      image_url: sweet.image,
       quantity: sweet.quantity,
     }))
 
