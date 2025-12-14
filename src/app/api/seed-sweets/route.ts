@@ -2,14 +2,13 @@ import { NextResponse } from 'next/server'
 import { getDb } from '@/lib/mongodb'
 
 export const indianSweets = [
-  // --- SWEETS ---
   { 
     name: "Gulab Jamun", 
     category: "Sweet", 
     price: 40, 
     quantity: 100, 
     description: "Deep-fried milk solids soaked in rose-flavored sugar syrup", 
-    image: "https://tse2.mm.bing.net/th?q=Gulab%20Jamun%20Indian%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=500&h=500&fit=crop" 
   },
   { 
     name: "Rasgulla", 
@@ -17,7 +16,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 100, 
     description: "Soft spongy cottage cheese balls in light sugar syrup", 
-    image: "https://tse2.mm.bing.net/th?q=Rasgulla%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626132647523-66f0bf380027?w=500&h=500&fit=crop" 
   },
   { 
     name: "Jalebi", 
@@ -25,7 +24,7 @@ export const indianSweets = [
     price: 30, 
     quantity: 150, 
     description: "Crispy spiral-shaped sweet soaked in saffron syrup", 
-    image: "https://tse2.mm.bing.net/th?q=Jalebi%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=500&h=500&fit=crop" 
   },
   { 
     name: "Kaju Katli", 
@@ -33,7 +32,7 @@ export const indianSweets = [
     price: 80, 
     quantity: 80, 
     description: "Diamond-shaped cashew fudge with silver foil", 
-    image: "https://tse2.mm.bing.net/th?q=Kaju%20Katli&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626776876729-bab4269f07ab?w=500&h=500&fit=crop" 
   },
   { 
     name: "Ladoo", 
@@ -41,7 +40,7 @@ export const indianSweets = [
     price: 25, 
     quantity: 200, 
     description: "Traditional round sweet made with besan and ghee", 
-    image: "https://tse2.mm.bing.net/th?q=Besan%20Ladoo&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1595777216528-071e0127ccf4?w=500&h=500&fit=crop" 
   },
   { 
     name: "Barfi", 
@@ -49,7 +48,7 @@ export const indianSweets = [
     price: 50, 
     quantity: 120, 
     description: "Dense milk-based fudge with cardamom flavor", 
-    image: "https://tse2.mm.bing.net/th?q=Indian%20Barfi%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626776877900-b3cecf3b2fc7?w=500&h=500&fit=crop" 
   },
   { 
     name: "Peda", 
@@ -57,7 +56,7 @@ export const indianSweets = [
     price: 45, 
     quantity: 90, 
     description: "Soft milk-based sweet with saffron and cardamom", 
-    image: "https://tse2.mm.bing.net/th?q=Peda%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=500&h=500&fit=crop" 
   },
   { 
     name: "Rasmalai", 
@@ -65,7 +64,7 @@ export const indianSweets = [
     price: 60, 
     quantity: 70, 
     description: "Flattened paneer dumplings in creamy saffron milk", 
-    image: "https://tse2.mm.bing.net/th?q=Rasmalai&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1601000938259-9e92002320b2?w=500&h=500&fit=crop" 
   },
   { 
     name: "Sandesh", 
@@ -73,7 +72,7 @@ export const indianSweets = [
     price: 55, 
     quantity: 85, 
     description: "Bengali sweet made from fresh paneer and sugar", 
-    image: "https://tse2.mm.bing.net/th?q=Sandesh%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Mysore Pak", 
@@ -81,7 +80,7 @@ export const indianSweets = [
     price: 65, 
     quantity: 75, 
     description: "Rich gram flour sweet with ghee and sugar", 
-    image: "https://tse2.mm.bing.net/th?q=Mysore%20Pak&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Imarti", 
@@ -89,7 +88,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 110, 
     description: "Flower-shaped deep-fried sweet in sugar syrup", 
-    image: "https://tse2.mm.bing.net/th?q=Imarti%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=500&h=500&fit=crop" 
   },
   { 
     name: "Kheer", 
@@ -97,7 +96,7 @@ export const indianSweets = [
     price: 50, 
     quantity: 60, 
     description: "Creamy rice pudding with cardamom and nuts", 
-    image: "https://tse2.mm.bing.net/th?q=Kheer%20Dessert&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1589363904582-0ab1d7acf114?w=500&h=500&fit=crop" 
   },
   { 
     name: "Gajar Ka Halwa", 
@@ -105,7 +104,7 @@ export const indianSweets = [
     price: 55, 
     quantity: 65, 
     description: "Warm carrot pudding with khoya and nuts", 
-    image: "https://tse2.mm.bing.net/th?q=Gajar%20Ka%20Halwa&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=500&h=500&fit=crop" 
   },
   { 
     name: "Moong Dal Halwa", 
@@ -113,7 +112,7 @@ export const indianSweets = [
     price: 70, 
     quantity: 50, 
     description: "Rich lentil-based halwa with ghee", 
-    image: "https://tse2.mm.bing.net/th?q=Moong%20Dal%20Halwa&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=500&h=500&fit=crop" 
   },
   { 
     name: "Sohan Papdi", 
@@ -121,7 +120,7 @@ export const indianSweets = [
     price: 40, 
     quantity: 130, 
     description: "Flaky layered sweet with cardamom", 
-    image: "https://tse2.mm.bing.net/th?q=Sohan%20Papdi&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Kalakand", 
@@ -129,7 +128,7 @@ export const indianSweets = [
     price: 60, 
     quantity: 80, 
     description: "Grainy milk cake with cardamom", 
-    image: "https://tse2.mm.bing.net/th?q=Kalakand%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626776877900-b3cecf3b2fc7?w=500&h=500&fit=crop" 
   },
   { 
     name: "Cham Cham", 
@@ -137,7 +136,7 @@ export const indianSweets = [
     price: 45, 
     quantity: 90, 
     description: "Oval-shaped Bengali sweet in light syrup", 
-    image: "https://tse2.mm.bing.net/th?q=Cham%20Cham%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626132647523-66f0bf380027?w=500&h=500&fit=crop" 
   },
   { 
     name: "Khaja", 
@@ -145,7 +144,7 @@ export const indianSweets = [
     price: 30, 
     quantity: 100, 
     description: "Crispy layered pastry dipped in sugar syrup", 
-    image: "https://tse2.mm.bing.net/th?q=Khaja%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Balushahi", 
@@ -153,7 +152,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 95, 
     description: "Flaky fried pastry soaked in sugar syrup", 
-    image: "https://tse2.mm.bing.net/th?q=Balushahi&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Malpua", 
@@ -161,17 +160,16 @@ export const indianSweets = [
     price: 40, 
     quantity: 85, 
     description: "Sweet pancake dipped in sugar syrup", 
-    image: "https://tse2.mm.bing.net/th?q=Malpua%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=500&h=500&fit=crop" 
   },
 
-  // --- SNACKS ---
   { 
     name: "Samosa", 
     category: "Snack", 
     price: 20, 
     quantity: 200, 
     description: "Crispy triangular pastry with spiced potato filling", 
-    image: "https://tse2.mm.bing.net/th?q=Samosa&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1601050690597-df0568f70950?w=500&h=500&fit=crop" 
   },
   { 
     name: "Kachori", 
@@ -179,7 +177,7 @@ export const indianSweets = [
     price: 25, 
     quantity: 150, 
     description: "Deep-fried flaky pastry with dal filling", 
-    image: "https://tse2.mm.bing.net/th?q=Kachori&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626132647523-66f0bf380027?w=500&h=500&fit=crop" 
   },
   { 
     name: "Pakora", 
@@ -187,7 +185,7 @@ export const indianSweets = [
     price: 30, 
     quantity: 180, 
     description: "Crispy vegetable fritters in gram flour batter", 
-    image: "https://tse2.mm.bing.net/th?q=Pakora%20Fritters&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=500&h=500&fit=crop" 
   },
   { 
     name: "Aloo Tikki", 
@@ -195,7 +193,7 @@ export const indianSweets = [
     price: 25, 
     quantity: 160, 
     description: "Spiced potato patties fried until golden", 
-    image: "https://tse2.mm.bing.net/th?q=Aloo%20Tikki&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=500&h=500&fit=crop" 
   },
   { 
     name: "Pani Puri", 
@@ -203,7 +201,7 @@ export const indianSweets = [
     price: 30, 
     quantity: 140, 
     description: "Crispy hollow puris with spiced water", 
-    image: "https://tse2.mm.bing.net/th?q=Pani%20Puri&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Bhel Puri", 
@@ -211,7 +209,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 130, 
     description: "Tangy puffed rice mixture with chutneys", 
-    image: "https://tse2.mm.bing.net/th?q=Bhel%20Puri&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Sev Puri", 
@@ -219,7 +217,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 120, 
     description: "Crispy puris topped with sev and chutneys", 
-    image: "https://tse2.mm.bing.net/th?q=Sev%20Puri&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Dahi Puri", 
@@ -227,7 +225,7 @@ export const indianSweets = [
     price: 40, 
     quantity: 110, 
     description: "Puris filled with yogurt and chutneys", 
-    image: "https://tse2.mm.bing.net/th?q=Dahi%20Puri&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Papdi Chaat", 
@@ -235,7 +233,7 @@ export const indianSweets = [
     price: 40, 
     quantity: 115, 
     description: "Crispy wafers with potatoes and chutneys", 
-    image: "https://tse2.mm.bing.net/th?q=Papdi%20Chaat&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Ragda Pattice", 
@@ -243,17 +241,16 @@ export const indianSweets = [
     price: 45, 
     quantity: 100, 
     description: "Potato patties with spiced white peas curry", 
-    image: "https://tse2.mm.bing.net/th?q=Ragda%20Pattice&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=500&h=500&fit=crop" 
   },
 
-  // --- NAMKEEN & OTHERS ---
   { 
     name: "Sev Tamatar", 
     category: "Namkeen", 
     price: 50, 
     quantity: 80, 
     description: "Sev in spicy tomato gravy", 
-    image: "https://tse2.mm.bing.net/th?q=Sev%20Tamatar&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Bhujia", 
@@ -261,7 +258,7 @@ export const indianSweets = [
     price: 45, 
     quantity: 150, 
     description: "Crispy besan noodles with spices", 
-    image: "https://tse2.mm.bing.net/th?q=Bhujia%20Sev&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Chakli", 
@@ -269,7 +266,7 @@ export const indianSweets = [
     price: 40, 
     quantity: 140, 
     description: "Spiral-shaped crispy rice flour snack", 
-    image: "https://tse2.mm.bing.net/th?q=Chakli%20Snack&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Namak Pare", 
@@ -277,7 +274,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 160, 
     description: "Diamond-shaped salty crackers", 
-    image: "https://tse2.mm.bing.net/th?q=Namak%20Pare&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Shakkar Para", 
@@ -285,7 +282,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 150, 
     description: "Sweet diamond-shaped fried crackers", 
-    image: "https://tse2.mm.bing.net/th?q=Shakkar%20Para&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Mathri", 
@@ -293,7 +290,7 @@ export const indianSweets = [
     price: 30, 
     quantity: 170, 
     description: "Flaky crispy savory crackers", 
-    image: "https://tse2.mm.bing.net/th?q=Mathri&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Murukku", 
@@ -301,7 +298,7 @@ export const indianSweets = [
     price: 45, 
     quantity: 130, 
     description: "Spiral-shaped crunchy South Indian snack", 
-    image: "https://tse2.mm.bing.net/th?q=Murukku&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Mixture", 
@@ -309,7 +306,7 @@ export const indianSweets = [
     price: 50, 
     quantity: 140, 
     description: "Assorted crispy snack mix", 
-    image: "https://tse2.mm.bing.net/th?q=Indian%20Mixture%20Snack&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Aloo Bhujia", 
@@ -317,7 +314,7 @@ export const indianSweets = [
     price: 40, 
     quantity: 145, 
     description: "Potato-based crispy noodles", 
-    image: "https://tse2.mm.bing.net/th?q=Aloo%20Bhujia&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Masala Peanuts", 
@@ -325,7 +322,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 160, 
     description: "Spiced coated peanuts", 
-    image: "https://tse2.mm.bing.net/th?q=Masala%20Peanuts&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Khakhra", 
@@ -333,7 +330,7 @@ export const indianSweets = [
     price: 40, 
     quantity: 120, 
     description: "Thin crispy wheat crackers", 
-    image: "https://tse2.mm.bing.net/th?q=Khakhra&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Fafda", 
@@ -341,7 +338,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 130, 
     description: "Crispy gram flour strips", 
-    image: "https://tse2.mm.bing.net/th?q=Fafda&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Gathiya", 
@@ -349,7 +346,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 135, 
     description: "Thick crispy gram flour snack", 
-    image: "https://tse2.mm.bing.net/th?q=Gathiya&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Chivda", 
@@ -357,7 +354,7 @@ export const indianSweets = [
     price: 45, 
     quantity: 125, 
     description: "Flattened rice snack mix", 
-    image: "https://tse2.mm.bing.net/th?q=Chivda%20Snack&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Banana Chips", 
@@ -365,7 +362,7 @@ export const indianSweets = [
     price: 40, 
     quantity: 150, 
     description: "Crispy fried banana slices", 
-    image: "https://tse2.mm.bing.net/th?q=Banana%20Chips%20Indian&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1612822182443-1b8c4b01f9e6?w=500&h=500&fit=crop" 
   },
   { 
     name: "Shrikhand", 
@@ -373,7 +370,7 @@ export const indianSweets = [
     price: 55, 
     quantity: 70, 
     description: "Sweet strained yogurt with saffron", 
-    image: "https://tse2.mm.bing.net/th?q=Shrikhand&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1589363904582-0ab1d7acf114?w=500&h=500&fit=crop" 
   },
   { 
     name: "Rabri", 
@@ -381,7 +378,7 @@ export const indianSweets = [
     price: 60, 
     quantity: 65, 
     description: "Sweetened condensed milk dessert", 
-    image: "https://tse2.mm.bing.net/th?q=Rabri%20Dessert&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1589363904582-0ab1d7acf114?w=500&h=500&fit=crop" 
   },
   { 
     name: "Phirni", 
@@ -389,7 +386,7 @@ export const indianSweets = [
     price: 50, 
     quantity: 75, 
     description: "Creamy ground rice pudding", 
-    image: "https://tse2.mm.bing.net/th?q=Phirni&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1589363904582-0ab1d7acf114?w=500&h=500&fit=crop" 
   },
   { 
     name: "Kulfi", 
@@ -397,7 +394,7 @@ export const indianSweets = [
     price: 45, 
     quantity: 90, 
     description: "Traditional Indian ice cream", 
-    image: "https://tse2.mm.bing.net/th?q=Kulfi&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=500&h=500&fit=crop" 
   },
   { 
     name: "Falooda", 
@@ -405,7 +402,7 @@ export const indianSweets = [
     price: 70, 
     quantity: 60, 
     description: "Cold dessert with vermicelli and ice cream", 
-    image: "https://tse2.mm.bing.net/th?q=Falooda&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1579954115545-a95591f28bfc?w=500&h=500&fit=crop" 
   },
   { 
     name: "Besan Ladoo", 
@@ -413,7 +410,7 @@ export const indianSweets = [
     price: 30, 
     quantity: 180, 
     description: "Sweet gram flour balls with ghee", 
-    image: "https://tse2.mm.bing.net/th?q=Besan%20Ladoo&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1595777216528-071e0127ccf4?w=500&h=500&fit=crop" 
   },
   { 
     name: "Motichoor Ladoo", 
@@ -421,7 +418,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 170, 
     description: "Tiny boondi pearls shaped into balls", 
-    image: "https://tse2.mm.bing.net/th?q=Motichoor%20Ladoo&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1595777216528-071e0127ccf4?w=500&h=500&fit=crop" 
   },
   { 
     name: "Coconut Ladoo", 
@@ -429,7 +426,7 @@ export const indianSweets = [
     price: 30, 
     quantity: 160, 
     description: "Sweet coconut and condensed milk balls", 
-    image: "https://tse2.mm.bing.net/th?q=Coconut%20Ladoo&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1595777216528-071e0127ccf4?w=500&h=500&fit=crop" 
   },
   { 
     name: "Rava Ladoo", 
@@ -437,7 +434,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 150, 
     description: "Semolina balls with ghee and nuts", 
-    image: "https://tse2.mm.bing.net/th?q=Rava%20Ladoo&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1595777216528-071e0127ccf4?w=500&h=500&fit=crop" 
   },
   { 
     name: "Dry Fruit Roll", 
@@ -445,7 +442,7 @@ export const indianSweets = [
     price: 90, 
     quantity: 60, 
     description: "Premium roll with mixed dry fruits", 
-    image: "https://tse2.mm.bing.net/th?q=Dry%20Fruit%20Roll%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626776877900-b3cecf3b2fc7?w=500&h=500&fit=crop" 
   },
   { 
     name: "Anjeer Barfi", 
@@ -453,7 +450,7 @@ export const indianSweets = [
     price: 85, 
     quantity: 55, 
     description: "Fig-based fudge with nuts", 
-    image: "https://tse2.mm.bing.net/th?q=Anjeer%20Barfi&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626776877900-b3cecf3b2fc7?w=500&h=500&fit=crop" 
   },
   { 
     name: "Badam Barfi", 
@@ -461,7 +458,7 @@ export const indianSweets = [
     price: 95, 
     quantity: 50, 
     description: "Almond fudge with silver foil", 
-    image: "https://tse2.mm.bing.net/th?q=Badam%20Barfi&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626776877900-b3cecf3b2fc7?w=500&h=500&fit=crop" 
   },
   { 
     name: "Pista Barfi", 
@@ -469,7 +466,7 @@ export const indianSweets = [
     price: 100, 
     quantity: 45, 
     description: "Pistachio fudge with cardamom", 
-    image: "https://tse2.mm.bing.net/th?q=Pista%20Barfi&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626776877900-b3cecf3b2fc7?w=500&h=500&fit=crop" 
   },
   { 
     name: "Coconut Barfi", 
@@ -477,7 +474,7 @@ export const indianSweets = [
     price: 45, 
     quantity: 100, 
     description: "Sweet coconut fudge squares", 
-    image: "https://tse2.mm.bing.net/th?q=Coconut%20Barfi&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626776877900-b3cecf3b2fc7?w=500&h=500&fit=crop" 
   },
   { 
     name: "Milk Cake", 
@@ -485,7 +482,7 @@ export const indianSweets = [
     price: 55, 
     quantity: 85, 
     description: "Caramelized milk sweet", 
-    image: "https://tse2.mm.bing.net/th?q=Indian%20Milk%20Cake&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626776877900-b3cecf3b2fc7?w=500&h=500&fit=crop" 
   },
   { 
     name: "Patisa", 
@@ -493,7 +490,7 @@ export const indianSweets = [
     price: 40, 
     quantity: 110, 
     description: "Flaky layered sweet similar to Sohan Papdi", 
-    image: "https://tse2.mm.bing.net/th?q=Patisa%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Chum Chum", 
@@ -501,7 +498,7 @@ export const indianSweets = [
     price: 45, 
     quantity: 95, 
     description: "Cylindrical Bengali sweet", 
-    image: "https://tse2.mm.bing.net/th?q=Chum%20Chum%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626132647523-66f0bf380027?w=500&h=500&fit=crop" 
   },
   { 
     name: "Malai Sandwich", 
@@ -509,7 +506,7 @@ export const indianSweets = [
     price: 50, 
     quantity: 80, 
     description: "Cream-filled sweet sandwich", 
-    image: "https://tse2.mm.bing.net/th?q=Malai%20Sandwich%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1626132647523-66f0bf380027?w=500&h=500&fit=crop" 
   },
   { 
     name: "Gujiya", 
@@ -517,7 +514,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 120, 
     description: "Sweet dumpling with khoya filling", 
-    image: "https://tse2.mm.bing.net/th?q=Gujiya&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Ghevar", 
@@ -525,7 +522,7 @@ export const indianSweets = [
     price: 60, 
     quantity: 70, 
     description: "Disc-shaped Rajasthani sweet", 
-    image: "https://tse2.mm.bing.net/th?q=Ghevar&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Pinni", 
@@ -533,7 +530,7 @@ export const indianSweets = [
     price: 40, 
     quantity: 90, 
     description: "Punjabi wheat flour sweet balls", 
-    image: "https://tse2.mm.bing.net/th?q=Pinni%20Sweet&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1595777216528-071e0127ccf4?w=500&h=500&fit=crop" 
   },
   { 
     name: "Petha", 
@@ -541,7 +538,7 @@ export const indianSweets = [
     price: 45, 
     quantity: 100, 
     description: "Translucent ash gourd sweet from Agra", 
-    image: "https://tse2.mm.bing.net/th?q=Agra%20Petha&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Raj Kachori", 
@@ -549,7 +546,7 @@ export const indianSweets = [
     price: 50, 
     quantity: 80, 
     description: "Large stuffed crispy puri with fillings", 
-    image: "https://tse2.mm.bing.net/th?q=Raj%20Kachori&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Dahi Vada", 
@@ -557,7 +554,7 @@ export const indianSweets = [
     price: 40, 
     quantity: 90, 
     description: "Lentil dumplings in spiced yogurt", 
-    image: "https://tse2.mm.bing.net/th?q=Dahi%20Vada&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Dhokla", 
@@ -565,7 +562,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 100, 
     description: "Steamed savory gram flour cake", 
-    image: "https://tse2.mm.bing.net/th?q=Dhokla&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Khandvi", 
@@ -573,7 +570,7 @@ export const indianSweets = [
     price: 40, 
     quantity: 85, 
     description: "Rolled gram flour savory snack", 
-    image: "https://tse2.mm.bing.net/th?q=Khandvi&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Thepla", 
@@ -581,7 +578,7 @@ export const indianSweets = [
     price: 30, 
     quantity: 110, 
     description: "Spiced flatbread with fenugreek", 
-    image: "https://tse2.mm.bing.net/th?q=Thepla&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606312619070-d48b4a7af4ce?w=500&h=500&fit=crop" 
   },
   { 
     name: "Methi Gota", 
@@ -589,7 +586,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 95, 
     description: "Fenugreek fritters", 
-    image: "https://tse2.mm.bing.net/th?q=Methi%20Gota&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=500&h=500&fit=crop" 
   },
   { 
     name: "Onion Bhaji", 
@@ -597,7 +594,7 @@ export const indianSweets = [
     price: 30, 
     quantity: 120, 
     description: "Crispy onion fritters", 
-    image: "https://tse2.mm.bing.net/th?q=Onion%20Bhaji&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=500&h=500&fit=crop" 
   },
   { 
     name: "Mirchi Vada", 
@@ -605,7 +602,7 @@ export const indianSweets = [
     price: 25, 
     quantity: 130, 
     description: "Stuffed chili fritters", 
-    image: "https://tse2.mm.bing.net/th?q=Mirchi%20Vada&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=500&h=500&fit=crop" 
   },
   { 
     name: "Bread Pakora", 
@@ -613,7 +610,7 @@ export const indianSweets = [
     price: 30, 
     quantity: 115, 
     description: "Stuffed bread fritters", 
-    image: "https://tse2.mm.bing.net/th?q=Bread%20Pakora&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=500&h=500&fit=crop" 
   },
   { 
     name: "Moong Dal Pakora", 
@@ -621,7 +618,7 @@ export const indianSweets = [
     price: 35, 
     quantity: 105, 
     description: "Lentil fritters", 
-    image: "https://tse2.mm.bing.net/th?q=Moong%20Dal%20Pakora&w=500&h=500&c=7" 
+    image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84?w=500&h=500&fit=crop" 
   }
 ];
 
