@@ -88,16 +88,16 @@ export default function LoginPage() {
                 {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 Sign In
               </Button>
-              <div className="flex items-center justify-between w-full text-sm">
-                <p className="text-muted-foreground">
+              <div className="text-center w-full space-y-2">
+                <p className="text-sm text-muted-foreground">
                   Don&apos;t have an account?{" "}
                   <Link href="/register" className="text-primary font-medium hover:underline">
                     Sign up
                   </Link>
                 </p>
-                <Link href="/admin/login" className="text-primary font-medium hover:underline flex items-center gap-1">
+                <Link href="/admin/login" className="text-sm text-primary font-medium hover:underline inline-flex items-center gap-1 justify-center">
                   <Shield className="h-3.5 w-3.5" />
-                  Admin
+                  Admin Login
                 </Link>
               </div>
             </CardFooter>
