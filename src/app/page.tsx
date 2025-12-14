@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
 import { Search, Filter, X, Loader2 } from "lucide-react"
 import { motion } from "framer-motion"
+import Image from "next/image"
 
 export default function HomePage() {
   const [sweets, setSweets] = useState<Sweet[]>([])
@@ -77,7 +78,9 @@ export default function HomePage() {
             transition={{ duration: 0.6 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <span className="text-6xl mb-4 block">🪷</span>
+            <div className="mb-4 flex justify-center">
+              <Image src="/mithai-icon.png" alt="Mithai Mahal" width={64} height={64} className="rounded-full" />
+            </div>
             <h1 className="font-display text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-primary via-orange-500 to-primary bg-clip-text text-transparent">
               Mithai Mahal
             </h1>
