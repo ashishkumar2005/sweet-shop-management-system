@@ -105,7 +105,10 @@ export default function CheckoutPage() {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify({ quantity: item.cartQuantity })
+          body: JSON.stringify({ 
+            quantity: item.cartQuantity,
+            userEmail: user.email
+          })
         })
       }
       
