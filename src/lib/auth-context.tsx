@@ -27,13 +27,41 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token')
-    const storedUser = localStorage.getItem('user')
-    if (storedToken && storedUser) {
-      setToken(storedToken)
-      setUser(JSON.parse(storedUser))
+    try {
+      const storedToken = localStorage.getItem('token')
+      const storedUser = localStorage.getItem('user')
+      if (storedToken && storedUser) {
+        setToken(storedToken)
+        setUser(JSON.parse(storedUser))
+      }
+    } catch (error) {
+      console.error('Failed to load auth data:', error)
+    } finally {
+      setIsLoading(false)
     }
-    setIsLoading(false)
+  }, [])
+
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'token' || e.key === 'user') {
+        try {
+          const storedToken = localStorage.getItem('token')
+          const storedUser = localStorage.getItem('user')
+          if (storedToken && storedUser) {
+            setToken(storedToken)
+            setUser(JSON.parse(storedUser))
+          } else {
+            setToken(null)
+            setUser(null)
+          }
+        } catch (error) {
+          console.error('Failed to sync auth data:', error)
+        }
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
   }, [])
 
   const login = async (email: string, password: string) => {
