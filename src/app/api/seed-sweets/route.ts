@@ -1,6 +1,3 @@
-import { NextResponse } from 'next/server'
-import { getDb } from '@/lib/mongodb'
-
 export const indianSweets = [
   // --- SWEETS ---
   { 
@@ -624,32 +621,3 @@ export const indianSweets = [
     image: "https://tse2.mm.bing.net/th?q=Moong%20Dal%20Pakora&w=500&h=500&c=7" 
   }
 ];
-
-export async function POST() {
-  try {
-    const db = await getDb()
-    
-    await db.collection('sweets').deleteMany({})
-    
-    const sweetsWithId = indianSweets.map(sweet => ({
-      ...sweet,
-      id: Math.random().toString(36).substr(2, 9),
-      created_at: new Date(),
-      updated_at: new Date()
-    }))
-    
-    await db.collection('sweets').insertMany(sweetsWithId)
-    
-    return NextResponse.json({ 
-      success: true, 
-      message: `${sweetsWithId.length} Indian sweets and snacks added!`,
-      count: sweetsWithId.length
-    })
-  } catch (error) {
-    console.error('Failed to seed sweets:', error)
-    return NextResponse.json(
-      { error: 'Failed to seed database' },
-      { status: 500 }
-    )
-  }
-}
