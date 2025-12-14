@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect, useMemo } from "react"
-import { Sweet } from "@/lib/supabase"
+import { Sweet } from "@/lib/types"
 import { Navbar } from "@/components/navbar"
 import { SweetCard } from "@/components/sweet-card"
 import { Input } from "@/components/ui/input"
