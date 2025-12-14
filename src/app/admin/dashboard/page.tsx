@@ -4,7 +4,6 @@ import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/lib/auth-context"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
@@ -22,13 +21,16 @@ import {
   Ticket,
   TreePine,
   DollarSign,
-  TrendingUp,
   Download,
   MoreHorizontal,
   CreditCard,
-  Wallet
+  Wallet,
+  TrendingUp,
+  Users,
+  Package,
+  BarChart3
 } from "lucide-react"
-import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts'
+import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart, PieChart, Pie, Cell } from 'recharts'
 
 type DashboardData = {
   totalSales: string
@@ -99,92 +101,94 @@ export default function AdminDashboardPage() {
 
   if (authLoading || !user || user.role !== 'admin' || isLoading || !data) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
       </div>
     )
   }
 
+  const pieData = [
+    { name: 'Profit', value: parseInt(data.profitExpense.profit) },
+    { name: 'Expense', value: parseInt(data.profitExpense.expense) },
+  ]
+  const COLORS = ['#8b5cf6', '#ec4899']
+
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex">
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
+      <aside className="w-64 bg-slate-900/50 backdrop-blur-xl border-r border-white/10 flex flex-col">
         <div className="p-6">
-          <div className="flex items-center gap-2 mb-8">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold">C</span>
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/50">
+              <ShoppingCart className="h-5 w-5 text-white" />
             </div>
-            <span className="font-bold text-lg">Catalog</span>
+            <span className="font-bold text-xl bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Mithai Mahal</span>
           </div>
 
           <div className="space-y-1">
-            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">HOME</div>
-            <div className="space-y-0.5">
-              <Button variant="ghost" className="w-full justify-start gap-2 text-gray-700 hover:bg-gray-100">
+            <div className="text-xs font-semibold text-purple-400 uppercase tracking-wider mb-3">MAIN MENU</div>
+            <div className="space-y-1">
+              <Button variant="ghost" className="w-full justify-start gap-3 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 border border-purple-500/30">
+                <BarChart3 className="h-4 w-4" />
+                Dashboard
+              </Button>
+              <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5">
                 <ShoppingCart className="h-4 w-4" />
-                eCommerce
+                Products
+              </Button>
+              <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5">
+                <Package className="h-4 w-4" />
+                Orders
+              </Button>
+              <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5">
+                <Users className="h-4 w-4" />
+                Customers
               </Button>
             </div>
 
-            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">App</div>
-            <div className="space-y-0.5">
-              <Button variant="ghost" className="w-full justify-start gap-2 text-gray-600 hover:bg-gray-100">
+            <div className="text-xs font-semibold text-purple-400 uppercase tracking-wider mt-6 mb-3">APPS</div>
+            <div className="space-y-1">
+              <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5">
                 <MessageSquare className="h-4 w-4" />
-                Contacts
+                Messages
               </Button>
-              <Button variant="ghost" className="w-full justify-start gap-2 text-gray-600 hover:bg-gray-100">
-                <MessageSquare className="h-4 w-4" />
-                Chats
-              </Button>
-              <Button variant="ghost" className="w-full justify-start gap-2 text-gray-600 hover:bg-gray-100">
+              <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5">
                 <Calendar className="h-4 w-4" />
                 Calendar
               </Button>
-              <Button variant="ghost" className="w-full justify-start gap-2 text-gray-600 hover:bg-gray-100">
+              <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5">
                 <MailIcon className="h-4 w-4" />
                 Email
               </Button>
-              <Button variant="ghost" className="w-full justify-start gap-2 text-gray-600 hover:bg-gray-100">
+              <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5">
                 <Ticket className="h-4 w-4" />
-                Tickets
-              </Button>
-            </div>
-
-            <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">Page</div>
-            <div className="space-y-0.5">
-              <Button variant="ghost" className="w-full justify-start gap-2 text-gray-600 hover:bg-gray-100">
-                <TreePine className="h-4 w-4" />
-                Tree view
-              </Button>
-              <Button variant="ghost" className="w-full justify-start gap-2 text-gray-600 hover:bg-gray-100">
-                <DollarSign className="h-4 w-4" />
-                Pricing
+                Support
               </Button>
             </div>
           </div>
         </div>
 
         {/* User Profile at Bottom */}
-        <div className="mt-auto border-t border-gray-200 p-4">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10">
-              <AvatarFallback className="bg-blue-600 text-white">
+        <div className="mt-auto border-t border-white/10 p-4">
+          <div className="flex items-center gap-3 mb-3">
+            <Avatar className="h-10 w-10 ring-2 ring-purple-500">
+              <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white font-semibold">
                 {user.name?.charAt(0).toUpperCase() || 'A'}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium text-gray-900 truncate">{user.name || 'Admin'}</div>
-              <div className="text-xs text-gray-500">Admin</div>
+              <div className="text-sm font-medium text-white truncate">{user.name || 'Admin'}</div>
+              <div className="text-xs text-purple-400">Administrator</div>
             </div>
           </div>
-          <div className="flex gap-2 mt-3">
-            <Button variant="ghost" size="sm" className="flex-1 gap-1 text-xs" onClick={() => router.push('/admin')}>
+          <div className="flex gap-2">
+            <Button variant="ghost" size="sm" className="flex-1 gap-1 text-xs text-slate-300 hover:bg-white/5" onClick={() => router.push('/admin')}>
               <Settings className="h-3 w-3" />
-              Setting
+              Settings
             </Button>
-            <Button variant="ghost" size="sm" className="flex-1 gap-1 text-xs" onClick={handleLogout}>
+            <Button variant="ghost" size="sm" className="flex-1 gap-1 text-xs text-slate-300 hover:bg-white/5" onClick={handleLogout}>
               <LogOut className="h-3 w-3" />
-              Log out
+              Logout
             </Button>
           </div>
         </div>
@@ -193,25 +197,27 @@ export default function AdminDashboardPage() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Navigation */}
-        <header className="bg-white border-b border-gray-200 px-6 py-4">
+        <header className="bg-slate-900/50 backdrop-blur-xl border-b border-white/10 px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex-1 max-w-lg">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
-                  placeholder="Search"
-                  className="pl-10 bg-gray-50 border-gray-200"
+                  placeholder="Search products, orders, customers..."
+                  className="pl-10 bg-slate-800/50 border-white/10 text-white placeholder:text-slate-400 focus:border-purple-500"
                 />
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="icon" className="text-gray-600">
+            <div className="flex items-center gap-3">
+              <Button variant="ghost" size="icon" className="text-slate-300 hover:bg-white/5 relative">
                 <Mail className="h-5 w-5" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-pink-500 rounded-full"></span>
               </Button>
-              <Button variant="ghost" size="icon" className="text-gray-600">
+              <Button variant="ghost" size="icon" className="text-slate-300 hover:bg-white/5 relative">
                 <Bell className="h-5 w-5" />
+                <span className="absolute top-1 right-1 w-2 h-2 bg-pink-500 rounded-full"></span>
               </Button>
-              <Button variant="ghost" size="icon" className="text-gray-600">
+              <Button variant="ghost" size="icon" className="text-slate-300 hover:bg-white/5">
                 <Settings className="h-5 w-5" />
               </Button>
             </div>
@@ -221,48 +227,118 @@ export default function AdminDashboardPage() {
         {/* Dashboard Content */}
         <main className="flex-1 overflow-auto p-6">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Dashboard Overview</h1>
+            <p className="text-slate-400 mt-1">Welcome back! Here's what's happening today.</p>
+          </div>
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-4 gap-6 mb-6">
+            <Card className="bg-gradient-to-br from-purple-500 to-purple-600 border-0 shadow-xl shadow-purple-500/20">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-purple-200 text-sm font-medium">Total Sales</p>
+                    <h3 className="text-3xl font-bold text-white mt-2">${data.totalSales}</h3>
+                    <p className="text-purple-200 text-xs mt-1">+12.5% from last month</p>
+                  </div>
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                    <DollarSign className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-pink-500 to-pink-600 border-0 shadow-xl shadow-pink-500/20">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-pink-200 text-sm font-medium">Total Orders</p>
+                    <h3 className="text-3xl font-bold text-white mt-2">{data.totalOrders}</h3>
+                    <p className="text-pink-200 text-xs mt-1">+8.2% from last month</p>
+                  </div>
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                    <ShoppingCart className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-blue-500 to-blue-600 border-0 shadow-xl shadow-blue-500/20">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-blue-200 text-sm font-medium">Active Users</p>
+                    <h3 className="text-3xl font-bold text-white mt-2">{data.activeUsers.total.toLocaleString()}</h3>
+                    <p className="text-blue-200 text-xs mt-1">+{data.activeUsers.growth}% growth</p>
+                  </div>
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                    <Users className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-orange-500 to-orange-600 border-0 shadow-xl shadow-orange-500/20">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-orange-200 text-sm font-medium">Revenue</p>
+                    <h3 className="text-3xl font-bold text-white mt-2">${data.profitExpense.total}</h3>
+                    <p className="text-orange-200 text-xs mt-1">Net profit this month</p>
+                  </div>
+                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                    <TrendingUp className="h-6 w-6 text-white" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Sales Distribution */}
-          <div className="bg-gradient-to-br from-blue-50 via-purple-50 to-blue-50 rounded-2xl p-6 mb-6">
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Sales Distribution</h2>
-              <p className="text-sm text-gray-600">This is all over Platform Sales Generated</p>
+          <div className="bg-gradient-to-br from-slate-800/50 to-purple-900/30 backdrop-blur-xl rounded-2xl p-6 mb-6 border border-white/10 shadow-xl">
+            <div className="mb-6">
+              <h2 className="text-xl font-semibold text-white">Sales Distribution by Channel</h2>
+              <p className="text-sm text-slate-400">Platform-wide sales breakdown</p>
             </div>
-            <div className="grid grid-cols-5 gap-4">
-              <Card className="bg-white/80 backdrop-blur border-0 shadow-sm">
+            <div className="grid grid-cols-4 gap-4">
+              <Card className="bg-slate-800/50 backdrop-blur border-white/10">
                 <CardContent className="p-6">
-                  <div className="text-3xl font-bold text-gray-900">${data.totalSales}</div>
-                  <div className="text-sm text-gray-600 mt-1">Total Sales</div>
+                  <div className="text-2xl font-bold text-purple-400">${data.salesByChannel.website.amount}</div>
+                  <div className="text-xs text-slate-400 mt-1">({data.salesByChannel.website.percentage}% of total)</div>
+                  <div className="text-sm text-slate-300 mt-2 font-medium">Website Sales</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
+                    <div className="bg-gradient-to-r from-purple-500 to-purple-400 h-2 rounded-full" style={{width: `${data.salesByChannel.website.percentage}%`}}></div>
+                  </div>
                 </CardContent>
               </Card>
-              <Card className="bg-white/80 backdrop-blur border-0 shadow-sm">
+              <Card className="bg-slate-800/50 backdrop-blur border-white/10">
                 <CardContent className="p-6">
-                  <div className="text-2xl font-bold text-gray-900">${data.salesByChannel.website.amount}</div>
-                  <div className="text-xs text-gray-500 mt-1">({data.salesByChannel.website.percentage}%)</div>
-                  <div className="text-sm text-gray-600 mt-1">By Website</div>
+                  <div className="text-2xl font-bold text-pink-400">${data.salesByChannel.mobile.amount}</div>
+                  <div className="text-xs text-slate-400 mt-1">({data.salesByChannel.mobile.percentage}% of total)</div>
+                  <div className="text-sm text-slate-300 mt-2 font-medium">Mobile Sales</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
+                    <div className="bg-gradient-to-r from-pink-500 to-pink-400 h-2 rounded-full" style={{width: `${data.salesByChannel.mobile.percentage}%`}}></div>
+                  </div>
                 </CardContent>
               </Card>
-              <Card className="bg-white/80 backdrop-blur border-0 shadow-sm">
+              <Card className="bg-slate-800/50 backdrop-blur border-white/10">
                 <CardContent className="p-6">
-                  <div className="text-2xl font-bold text-gray-900">${data.salesByChannel.mobile.amount}</div>
-                  <div className="text-xs text-gray-500 mt-1">({data.salesByChannel.mobile.percentage}%)</div>
-                  <div className="text-sm text-gray-600 mt-1">By Mobile</div>
+                  <div className="text-2xl font-bold text-blue-400">${data.salesByChannel.market.amount}</div>
+                  <div className="text-xs text-slate-400 mt-1">({data.salesByChannel.market.percentage}% of total)</div>
+                  <div className="text-sm text-slate-300 mt-2 font-medium">Market Sales</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
+                    <div className="bg-gradient-to-r from-blue-500 to-blue-400 h-2 rounded-full" style={{width: `${data.salesByChannel.market.percentage}%`}}></div>
+                  </div>
                 </CardContent>
               </Card>
-              <Card className="bg-white/80 backdrop-blur border-0 shadow-sm">
+              <Card className="bg-slate-800/50 backdrop-blur border-white/10">
                 <CardContent className="p-6">
-                  <div className="text-2xl font-bold text-gray-900">${data.salesByChannel.market.amount}</div>
-                  <div className="text-xs text-gray-500 mt-1">({data.salesByChannel.market.percentage}%)</div>
-                  <div className="text-sm text-gray-600 mt-1">By Market</div>
-                </CardContent>
-              </Card>
-              <Card className="bg-white/80 backdrop-blur border-0 shadow-sm">
-                <CardContent className="p-6">
-                  <div className="text-2xl font-bold text-gray-900">${data.salesByChannel.agent.amount}</div>
-                  <div className="text-xs text-gray-500 mt-1">({data.salesByChannel.agent.percentage}%)</div>
-                  <div className="text-sm text-gray-600 mt-1">By Agent</div>
+                  <div className="text-2xl font-bold text-orange-400">${data.salesByChannel.agent.amount}</div>
+                  <div className="text-xs text-slate-400 mt-1">({data.salesByChannel.agent.percentage}% of total)</div>
+                  <div className="text-sm text-slate-300 mt-2 font-medium">Agent Sales</div>
+                  <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-400 h-2 rounded-full" style={{width: `${data.salesByChannel.agent.percentage}%`}}></div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -270,97 +346,104 @@ export default function AdminDashboardPage() {
 
           {/* Charts Row */}
           <div className="grid grid-cols-3 gap-6 mb-6">
-            {/* Sales Overview */}
-            <Card className="border-gray-200">
+            {/* Sales Overview with Pie Chart */}
+            <Card className="bg-slate-800/50 backdrop-blur border-white/10">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-base font-semibold">Sales Overview</CardTitle>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreHorizontal className="h-4 w-4" />
+                <CardTitle className="text-base font-semibold text-white">Profit vs Expense</CardTitle>
+                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/5">
+                  <MoreHorizontal className="h-4 w-4 text-slate-400" />
                 </Button>
               </CardHeader>
               <CardContent>
                 <div className="mb-4">
-                  <div className="text-2xl font-bold">${data.profitExpense.total}</div>
+                  <div className="text-2xl font-bold text-white">${data.profitExpense.total}</div>
                   <div className="flex gap-4 mt-2 text-sm">
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-3 rounded-full bg-blue-600"></div>
-                      <span className="text-gray-600">${data.profitExpense.profit} Profit</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+                      <span className="text-slate-300">${data.profitExpense.profit} Profit</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-3 rounded-full bg-cyan-400"></div>
-                      <span className="text-gray-600">${data.profitExpense.expense} Expense</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 rounded-full bg-pink-500"></div>
+                      <span className="text-slate-300">${data.profitExpense.expense} Expense</span>
                     </div>
                   </div>
                 </div>
-                <ResponsiveContainer width="100%" height={200}>
-                  <AreaChart data={[
-                    { value: 400 },
-                    { value: 600 },
-                    { value: 500 },
-                    { value: 700 },
-                    { value: 600 },
-                    { value: 800 }
-                  ]}>
-                    <defs>
-                      <linearGradient id="colorProfit" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
-                    <Area type="monotone" dataKey="value" stroke="#3b82f6" strokeWidth={3} fill="url(#colorProfit)" />
-                  </AreaChart>
+                <ResponsiveContainer width="100%" height={180}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={50}
+                      outerRadius={70}
+                      fill="#8884d8"
+                      paddingAngle={5}
+                      dataKey="value"
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                      ))}
+                    </Pie>
+                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }} />
+                  </PieChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>
 
             {/* Revenue Updates */}
-            <Card className="border-gray-200">
+            <Card className="bg-slate-800/50 backdrop-blur border-white/10">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-base font-semibold">Revenue Updates</CardTitle>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreHorizontal className="h-4 w-4" />
+                <CardTitle className="text-base font-semibold text-white">Revenue (Last 7 Days)</CardTitle>
+                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/5">
+                  <MoreHorizontal className="h-4 w-4 text-slate-400" />
                 </Button>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={240}>
+                <ResponsiveContainer width="100%" height={220}>
                   <BarChart data={data.revenueData}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                    <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 12 }} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 12 }} />
-                    <Tooltip />
-                    <Bar dataKey="revenue" fill="#818cf8" radius={[8, 8, 0, 0]} />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.1)" />
+                    <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 12 }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }} />
+                    <Bar dataKey="revenue" fill="url(#barGradient)" radius={[8, 8, 0, 0]} />
+                    <defs>
+                      <linearGradient id="barGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#8b5cf6" />
+                        <stop offset="100%" stopColor="#ec4899" />
+                      </linearGradient>
+                    </defs>
                   </BarChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>
 
             {/* Yearly Sales */}
-            <Card className="border-gray-200">
+            <Card className="bg-slate-800/50 backdrop-blur border-white/10">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-base font-semibold">Yearly Sales</CardTitle>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreHorizontal className="h-4 w-4" />
+                <CardTitle className="text-base font-semibold text-white">Yearly Comparison</CardTitle>
+                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/5">
+                  <MoreHorizontal className="h-4 w-4 text-slate-400" />
                 </Button>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-4 mb-4">
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-blue-600"></div>
-                    <span className="text-sm text-gray-600">${data.yearlySales.total2024} 2023</span>
+                    <div className="w-3 h-3 rounded-full bg-purple-500"></div>
+                    <span className="text-sm text-slate-300">${data.yearlySales.total2024} 2024</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-cyan-300"></div>
-                    <span className="text-sm text-gray-600">${data.yearlySales.total2023} 2022</span>
+                    <div className="w-3 h-3 rounded-full bg-pink-400"></div>
+                    <span className="text-sm text-slate-300">${data.yearlySales.total2023} 2023</span>
                   </div>
                 </div>
-                <ResponsiveContainer width="100%" height={200}>
+                <ResponsiveContainer width="100%" height={180}>
                   <LineChart data={data.yearlySales.data}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-                    <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 10 }} />
-                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#9ca3af', fontSize: 10 }} />
-                    <Tooltip />
-                    <Line type="monotone" dataKey="sales2024" stroke="#3b82f6" strokeWidth={3} dot={false} />
-                    <Line type="monotone" dataKey="sales2023" stroke="#67e8f9" strokeWidth={3} dot={false} />
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.1)" />
+                    <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 10 }} />
+                    <Tooltip contentStyle={{ backgroundColor: '#1e293b', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '8px' }} />
+                    <Line type="monotone" dataKey="sales2024" stroke="#8b5cf6" strokeWidth={3} dot={false} />
+                    <Line type="monotone" dataKey="sales2023" stroke="#ec4899" strokeWidth={3} dot={false} />
                   </LineChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -369,11 +452,11 @@ export default function AdminDashboardPage() {
 
           {/* Bottom Row */}
           <div className="grid grid-cols-2 gap-6">
-            {/* Active Users */}
-            <Card className="border-gray-200">
+            {/* Active Users with Map */}
+            <Card className="bg-slate-800/50 backdrop-blur border-white/10">
               <CardHeader className="flex flex-row items-center justify-between pb-4">
-                <CardTitle className="text-base font-semibold">Active User</CardTitle>
-                <Button variant="ghost" size="sm" className="gap-1 h-8 text-xs">
+                <CardTitle className="text-base font-semibold text-white">Global User Activity</CardTitle>
+                <Button variant="ghost" size="sm" className="gap-1 h-8 text-xs text-slate-300 hover:bg-white/5">
                   <Download className="h-3 w-3" />
                   Export
                 </Button>
@@ -381,25 +464,38 @@ export default function AdminDashboardPage() {
               <CardContent>
                 <div className="mb-4">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-xl font-bold text-blue-600">{data.activeUsers.growth}%</span>
-                    <span className="text-sm text-gray-600">Vs. pervious month</span>
+                    <span className="text-2xl font-bold text-purple-400">{data.activeUsers.growth}%</span>
+                    <span className="text-sm text-slate-400">growth vs. previous month</span>
                   </div>
                 </div>
-                <div className="relative h-48 bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg overflow-hidden">
-                  {/* World Map Placeholder */}
+                <div className="relative h-48 bg-gradient-to-br from-purple-900/20 to-pink-900/20 rounded-xl overflow-hidden border border-white/10">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <svg viewBox="0 0 800 400" className="w-full h-full opacity-20">
-                      <path d="M100,200 Q200,100 300,200 T500,200 T700,200" stroke="#3b82f6" fill="none" strokeWidth="1"/>
-                      <circle cx="150" cy="180" r="3" fill="#3b82f6"/>
-                      <circle cx="300" cy="200" r="3" fill="#3b82f6"/>
-                      <circle cx="450" cy="180" r="3" fill="#3b82f6"/>
-                      <circle cx="600" cy="220" r="3" fill="#3b82f6"/>
+                    <svg viewBox="0 0 800 400" className="w-full h-full opacity-30">
+                      <defs>
+                        <linearGradient id="mapGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                          <stop offset="0%" stopColor="#8b5cf6" />
+                          <stop offset="100%" stopColor="#ec4899" />
+                        </linearGradient>
+                      </defs>
+                      <path d="M100,200 Q200,100 300,200 T500,200 T700,200" stroke="url(#mapGradient)" fill="none" strokeWidth="2"/>
+                      <circle cx="150" cy="180" r="5" fill="#8b5cf6">
+                        <animate attributeName="r" from="3" to="8" dur="2s" repeatCount="indefinite"/>
+                      </circle>
+                      <circle cx="300" cy="200" r="5" fill="#ec4899">
+                        <animate attributeName="r" from="3" to="8" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+                      </circle>
+                      <circle cx="450" cy="180" r="5" fill="#8b5cf6">
+                        <animate attributeName="r" from="3" to="8" dur="2s" begin="1s" repeatCount="indefinite"/>
+                      </circle>
+                      <circle cx="600" cy="220" r="5" fill="#ec4899">
+                        <animate attributeName="r" from="3" to="8" dur="2s" begin="1.5s" repeatCount="indefinite"/>
+                      </circle>
                     </svg>
                   </div>
                   <div className="absolute bottom-4 left-4 right-4">
-                    <div className="bg-white/90 backdrop-blur p-4 rounded-lg">
-                      <div className="text-3xl font-bold text-gray-900">{data.activeUsers.total.toLocaleString()}</div>
-                      <div className="text-sm text-gray-600">Total Active User</div>
+                    <div className="bg-slate-900/80 backdrop-blur-lg p-4 rounded-xl border border-white/10">
+                      <div className="text-3xl font-bold text-white">{data.activeUsers.total.toLocaleString()}</div>
+                      <div className="text-sm text-purple-400">Active Users Worldwide</div>
                     </div>
                   </div>
                 </div>
@@ -407,37 +503,37 @@ export default function AdminDashboardPage() {
             </Card>
 
             {/* Payment Gateways */}
-            <Card className="border-gray-200">
+            <Card className="bg-slate-800/50 backdrop-blur border-white/10">
               <CardHeader className="flex flex-row items-center justify-between pb-4">
-                <CardTitle className="text-base font-semibold">Payment Gateways</CardTitle>
-                <Button variant="ghost" size="icon" className="h-8 w-8">
-                  <MoreHorizontal className="h-4 w-4" />
+                <CardTitle className="text-base font-semibold text-white">Recent Transactions</CardTitle>
+                <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-white/5">
+                  <MoreHorizontal className="h-4 w-4 text-slate-400" />
                 </Button>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {data.paymentGateways.map((gateway, i) => (
-                    <div key={i} className="flex items-center gap-4">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        gateway.icon === 'paypal' ? 'bg-pink-100' : 
-                        gateway.icon === 'wallet' ? 'bg-orange-100' : 'bg-blue-100'
+                    <div key={i} className="flex items-center gap-4 p-3 rounded-lg bg-slate-900/50 border border-white/5 hover:border-purple-500/30 transition-all">
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center shadow-lg ${
+                        gateway.icon === 'paypal' ? 'bg-gradient-to-br from-pink-500 to-pink-600' : 
+                        gateway.icon === 'wallet' ? 'bg-gradient-to-br from-orange-500 to-orange-600' : 'bg-gradient-to-br from-blue-500 to-blue-600'
                       }`}>
-                        {gateway.icon === 'paypal' && <DollarSign className="h-5 w-5 text-pink-600" />}
-                        {gateway.icon === 'wallet' && <Wallet className="h-5 w-5 text-orange-600" />}
-                        {gateway.icon === 'creditcard' && <CreditCard className="h-5 w-5 text-blue-600" />}
+                        {gateway.icon === 'paypal' && <DollarSign className="h-6 w-6 text-white" />}
+                        {gateway.icon === 'wallet' && <Wallet className="h-6 w-6 text-white" />}
+                        {gateway.icon === 'creditcard' && <CreditCard className="h-6 w-6 text-white" />}
                       </div>
                       <div className="flex-1">
-                        <div className="font-medium text-gray-900">{gateway.name}</div>
-                        <div className="text-xs text-gray-500">{gateway.category}</div>
+                        <div className="font-medium text-white">{gateway.name}</div>
+                        <div className="text-xs text-slate-400">{gateway.category}</div>
                       </div>
-                      <div className={`font-semibold ${gateway.amount > 0 ? 'text-gray-900' : 'text-red-600'}`}>
+                      <div className={`font-semibold ${gateway.amount > 0 ? 'text-green-400' : 'text-red-400'}`}>
                         {gateway.amount > 0 ? '+' : ''}{gateway.amount < 0 ? '-' : ''}${Math.abs(gateway.amount)}
                       </div>
                     </div>
                   ))}
                 </div>
-                <Button variant="link" className="w-full mt-4 text-blue-600">
-                  View all transactions
+                <Button variant="link" className="w-full mt-4 text-purple-400 hover:text-purple-300">
+                  View all transactions →
                 </Button>
               </CardContent>
             </Card>
