@@ -16,10 +16,14 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export function Navbar() {
-  const { user, logout } = useAuth()
+  const auth = useAuth()
   const { itemCount } = useCart()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter()
+
+  if (!auth) return null
+
+  const { user, logout, isLoading } = auth
 
   const handleLogout = () => {
     logout()
@@ -62,39 +66,43 @@ export function Navbar() {
               </Button>
             </Link>
 
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <User className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <div className="px-2 py-1.5 text-sm font-medium">{user.name}</div>
-                  <div className="px-2 py-1 text-xs text-muted-foreground">{user.email}</div>
-                  {user.role === 'admin' && (
-                    <DropdownMenuItem asChild>
-                      <Link href="/admin" className="cursor-pointer">
-                        <Settings className="mr-2 h-4 w-4" />
-                        Admin Dashboard
-                      </Link>
-                    </DropdownMenuItem>
-                  )}
-                  <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive">
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Logout
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <div className="hidden sm:flex items-center gap-2">
-                <Link href="/login">
-                  <Button variant="ghost" size="sm">Login</Button>
-                </Link>
-                <Link href="/register">
-                  <Button size="sm">Sign Up</Button>
-                </Link>
-              </div>
+            {!isLoading && (
+              <>
+                {user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <User className="h-5 w-5" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <div className="px-2 py-1.5 text-sm font-medium">{user.name}</div>
+                      <div className="px-2 py-1 text-xs text-muted-foreground">{user.email}</div>
+                      {user.role === 'admin' && (
+                        <DropdownMenuItem asChild>
+                          <Link href="/admin" className="cursor-pointer">
+                            <Settings className="mr-2 h-4 w-4" />
+                            Admin Dashboard
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-destructive">
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <div className="hidden sm:flex items-center gap-2">
+                    <Link href="/login">
+                      <Button variant="ghost" size="sm">Login</Button>
+                    </Link>
+                    <Link href="/register">
+                      <Button size="sm">Sign Up</Button>
+                    </Link>
+                  </div>
+                )}
+              </>
             )}
 
             <Button 
@@ -122,7 +130,7 @@ export function Navbar() {
                   Admin Dashboard
                 </Link>
               )}
-              {!user && (
+              {!user && !isLoading && (
                 <div className="flex gap-2 pt-2">
                   <Link href="/login" className="flex-1">
                     <Button variant="outline" className="w-full" size="sm">Login</Button>
