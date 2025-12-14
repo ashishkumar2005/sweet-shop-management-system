@@ -6,4 +6,5 @@ export interface Sweet {
   image_url: string
   description: string
   quantity: number
+  created_at?: string
 }
