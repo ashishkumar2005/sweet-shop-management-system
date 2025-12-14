@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import Image from "next/image"
 import { useAuth } from "@/lib/auth-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -41,7 +42,9 @@ export default function LoginPage() {
       <div className="container mx-auto px-4 py-16 flex items-center justify-center">
         <Card className="w-full max-w-md border-0 shadow-xl bg-card/80 backdrop-blur">
           <CardHeader className="text-center space-y-2">
-            <span className="text-4xl mb-2">🪷</span>
+            <div className="flex justify-center mb-2">
+              <Image src="/mithai-icon.png" alt="Mithai Mahal" width={48} height={48} className="object-contain" />
+            </div>
             <CardTitle className="font-display text-2xl">Welcome Back</CardTitle>
             <CardDescription>Sign in to your Mithai Mahal account</CardDescription>
           </CardHeader>
