@@ -1,75 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server'
-import connectDB from '@/lib/mongodb'
-import Sweet from '@/lib/models/Sweet'
-import { requireAuth } from '@/lib/middleware'
+import { supabase, supabaseAdmin } from '@/lib/supabase'
+import { requireAdmin } from '@/lib/middleware'
 
 export async function GET() {
   try {
-    await connectDB()
+    const { data, error } = await supabase
+      .from('sweets')
+      .select('*')
+      .order('created_at', { ascending: false })
 
-    const sweets = await Sweet.find().sort({ name: 1 }).lean()
+    if (error) throw error
 
-    const formattedSweets = sweets.map((sweet) => ({
-      id: sweet._id.toString(),
-      name: sweet.name,
-      category: sweet.category,
-      price: sweet.price,
-      quantity: sweet.quantity,
-      image_url: sweet.imageUrl,
-      description: sweet.description,
-      created_at: sweet.createdAt
-    }))
-
-    return NextResponse.json({ sweets: formattedSweets })
+    return NextResponse.json({ sweets: data || [] })
   } catch {
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to fetch sweets' }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest) {
-  const authResult = requireAuth(request)
+  const authResult = requireAdmin(request)
   if (authResult instanceof NextResponse) return authResult
 
   try {
-    const { name, category, price, quantity, image_url, description } = await request.json()
+    const body = await request.json()
+    const { name, category, price, quantity, image_url, description } = body
 
-    if (!name || !category || price === undefined) {
-      return NextResponse.json(
-        { error: 'Name, category, and price are required' },
-        { status: 400 }
-      )
-    }
+    const { data, error } = await supabaseAdmin
+      .from('sweets')
+      .insert({
+        name,
+        category,
+        price,
+        quantity,
+        image_url,
+        description
+      })
+      .select()
+      .single()
 
-    await connectDB()
+    if (error) throw error
 
-    const sweet = await Sweet.create({
-      name,
-      category,
-      price: parseFloat(price),
-      quantity: quantity || 0,
-      imageUrl: image_url || `https://source.unsplash.com/400x300/?${encodeURIComponent(name)},indian,sweet`,
-      description: description || ''
-    })
-
-    const formattedSweet = {
-      id: sweet._id.toString(),
-      name: sweet.name,
-      category: sweet.category,
-      price: sweet.price,
-      quantity: sweet.quantity,
-      image_url: sweet.imageUrl,
-      description: sweet.description,
-      created_at: sweet.createdAt
-    }
-
-    return NextResponse.json({ sweet: formattedSweet }, { status: 201 })
+    return NextResponse.json({ sweet: data })
   } catch {
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to create sweet' }, { status: 500 })
   }
 }
