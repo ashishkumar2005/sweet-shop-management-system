@@ -52,7 +52,9 @@ export function SweetCard({ sweet }: { sweet: Sweet }) {
           <div className="flex items-center justify-between mt-3">
             <div>
               <span className="text-xl font-bold text-primary">₹{sweet.price}</span>
-              <span className="text-xs text-muted-foreground ml-2">({sweet.quantity} in stock)</span>
+              {isOutOfStock && (
+                <span className="text-xs text-destructive ml-2">(Out of stock)</span>
+              )}
             </div>
             {cartItem ? (
               <div className="flex items-center gap-2">
