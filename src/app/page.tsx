@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Slider } from "@/components/ui/slider"
-import { Search, Filter, X, Loader2 } from "lucide-react"
+import { Search, Filter, X, Loader2, ChevronDown, ChevronUp } from "lucide-react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 
@@ -20,6 +20,9 @@ export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 100])
   const [showFilters, setShowFilters] = useState(false)
+  const [showAll, setShowAll] = useState(false)
+
+  const INITIAL_DISPLAY_COUNT = 12
 
   useEffect(() => {
     fetchSweets()
@@ -57,6 +60,12 @@ export default function HomePage() {
       return matchesSearch && matchesCategory && matchesPrice
     })
   }, [sweets, searchQuery, selectedCategory, priceRange])
+
+  const displayedSweets = useMemo(() => {
+    return showAll ? filteredSweets : filteredSweets.slice(0, INITIAL_DISPLAY_COUNT)
+  }, [filteredSweets, showAll])
+
+  const hasMore = filteredSweets.length > INITIAL_DISPLAY_COUNT
 
   const clearFilters = () => {
     setSearchQuery("")
@@ -173,7 +182,7 @@ export default function HomePage() {
           <main className="flex-1">
             <div className="flex items-center justify-between mb-6">
               <p className="text-sm text-muted-foreground">
-                Showing {filteredSweets.length} of {sweets.length} sweets
+                Showing {displayedSweets.length} of {filteredSweets.length} sweets
               </p>
             </div>
 
@@ -187,18 +196,43 @@ export default function HomePage() {
                 <Button variant="link" onClick={clearFilters}>Clear filters</Button>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {filteredSweets.map((sweet, index) => (
-                  <motion.div
-                    key={sweet.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
-                  >
-                    <SweetCard sweet={sweet} />
-                  </motion.div>
-                ))}
-              </div>
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                  {displayedSweets.map((sweet, index) => (
+                    <motion.div
+                      key={sweet.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <SweetCard sweet={sweet} />
+                    </motion.div>
+                  ))}
+                </div>
+
+                {hasMore && (
+                  <div className="flex justify-center mt-8">
+                    <Button
+                      onClick={() => setShowAll(!showAll)}
+                      variant="outline"
+                      size="lg"
+                      className="gap-2"
+                    >
+                      {showAll ? (
+                        <>
+                          <ChevronUp className="h-4 w-4" />
+                          Show Less
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown className="h-4 w-4" />
+                          Show More ({filteredSweets.length - INITIAL_DISPLAY_COUNT} more)
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
           </main>
         </div>
