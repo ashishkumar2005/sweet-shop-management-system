@@ -62,7 +62,7 @@ export default function LoginPage() {
                   className="bg-background/50"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2 mb-2">
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
                   <Input
@@ -86,7 +86,7 @@ export default function LoginPage() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter className="flex flex-col gap-4">
+            <CardFooter className="flex flex-col gap-4 pt-2">
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                 Sign In
