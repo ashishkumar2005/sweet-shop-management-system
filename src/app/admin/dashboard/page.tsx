@@ -8,30 +8,34 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { 
-  Loader2, 
-  Search, 
-  Mail, 
-  Bell, 
-  Settings, 
-  LogOut,
-  ShoppingCart,
-  MessageSquare,
-  Calendar,
-  Mail as MailIcon,
-  Ticket,
-    TreePine,
-    DollarSign,
-    Download,
-    MoreHorizontal,
-    CreditCard,
-    Wallet,
-    TrendingUp,
-    Users,
-    Package,
-    BarChart3,
-    IndianRupee
-  } from "lucide-react"
+    Loader2, 
+    Search, 
+    Mail, 
+    Bell, 
+    Settings, 
+    LogOut,
+    ShoppingCart,
+    MessageSquare,
+    Calendar,
+    Mail as MailIcon,
+    Ticket,
+      TreePine,
+      DollarSign,
+      Download,
+      MoreHorizontal,
+      CreditCard,
+      Wallet,
+      TrendingUp,
+      Users,
+      Package,
+      BarChart3,
+      IndianRupee,
+      Sun,
+      Moon
+    } from "lucide-react"
+import { ModeToggle } from "@/components/mode-toggle"
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart, PieChart, Pie, Cell } from 'recharts'
+
 
 type DashboardData = {
   totalSales: string
