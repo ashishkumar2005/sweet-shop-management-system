@@ -127,15 +127,19 @@ export default function AdminDashboardPage() {
 
           <div className="space-y-1">
             <div className="text-xs font-semibold text-purple-400 uppercase tracking-wider mb-3">MAIN MENU</div>
-            <div className="space-y-1">
-              <Button variant="ghost" className="w-full justify-start gap-3 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 border border-purple-500/30">
-                <BarChart3 className="h-4 w-4" />
-                Dashboard
-              </Button>
-              <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5">
-                <ShoppingCart className="h-4 w-4" />
-                Products
-              </Button>
+              <div className="space-y-1">
+                <Button variant="ghost" className="w-full justify-start gap-3 bg-purple-500/20 text-purple-300 hover:bg-purple-500/30 border border-purple-500/30">
+                  <BarChart3 className="h-4 w-4" />
+                  Dashboard
+                </Button>
+                <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5" onClick={() => router.push('/admin/sales-analysis')}>
+                  <TrendingUp className="h-4 w-4" />
+                  Sales Analysis
+                </Button>
+                <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5">
+                  <ShoppingCart className="h-4 w-4" />
+                  Products
+                </Button>
               <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5">
                 <Package className="h-4 w-4" />
                 Orders
