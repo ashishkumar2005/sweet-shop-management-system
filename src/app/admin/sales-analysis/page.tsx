@@ -577,3 +577,118 @@ export default function SalesAnalysisPage() {
     </div>
   )
 }
+"use client"
+
+import { useState, useEffect, useMemo } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/lib/auth-context"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { 
+    Loader2, 
+    Search, 
+    ShoppingCart, 
+    TrendingUp, 
+    DollarSign, 
+    BarChart3, 
+    Users, 
+    Package, 
+    Filter, 
+    Download, 
+    ArrowUpRight, 
+    ArrowDownRight,
+    PieChart as PieChartIcon,
+    Map as MapIcon,
+    Calendar,
+    LogOut,
+    Settings,
+    Bell,
+    Mail,
+    MoreHorizontal,
+    ChevronRight,
+    ChevronLeft,
+    Lightbulb,
+    CheckCircle2,
+    IndianRupee,
+    Sun,
+    Moon
+  } from "lucide-react"
+import { ModeToggle } from "@/components/mode-toggle"
+import { 
+
+  BarChart, 
+  Bar, 
+  LineChart, 
+  Line, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer, 
+  PieChart, 
+  Pie, 
+  Cell,
+  Legend,
+  AreaChart,
+  Area,
+  ComposedChart
+} from 'recharts'
+import { motion, AnimatePresence } from "framer-motion"
+
+type AnalysisData = {
+  kpis: {
+    totalSales: number
+    totalProfit: number
+    totalOrders: number
+    averageOrderValue: number
+    profitMargin: number
+  }
+  visualizations: {
+    salesTrend: Array<{ name: string; sales: number; profit: number }>
+    salesByCategory: Array<{ name: string; value: number }>
+    salesByRegion: Array<{ name: string; value: number }>
+    topProducts: Array<{ name: string; sales: number; profit: number; quantity: number }>
+    bottomProducts: Array<{ name: string; sales: number; profit: number; quantity: number }>
+    profitVsSales: Array<{ name: string; sales: number; profit: number }>
+  }
+  insights: string[]
+  recommendations: string[]
+  filters: {
+    categories: string[]
+    regions: string[]
+    products: string[]
+  }
+}
+
+const COLORS = ['#8b5cf6', '#ec4899', '#3b82f6', '#f59e0b', '#10b981', '#6366f1']
+
+export default function SalesAnalysisPage() {
+  const { user, logout, isLoading: authLoading } = useAuth()
+  const router = useRouter()
+  const [data, setData] = useState<AnalysisData | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  
+  // Filters
+  const [region, setRegion] = useState("all")
+  const [category, setCategory] = useState("all")
+  const [timeRange, setTimeRange] = useState("365")
+
+  useEffect(() => {
+    if (!authLoading && (!user || user.role !== 'admin')) {
+      router.push('/admin/login')
+    }
+  }, [user, authLoading, router])
+
+  useEffect(() => {
+    if (user?.role === 'admin') {
+      fetchAnalysisData()
+    }
+  }, [user, region, category, timeRange])
+
+  const fetchAnalysisData = async () => {
+    setIsLoading(true)
+    try {
+      const params = new UR
