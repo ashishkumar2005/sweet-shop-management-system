@@ -278,7 +278,7 @@ export default function SalesAnalysisPage() {
               {/* KPIs Section */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                 {[
-                  { label: "Total Sales", value: `₹${data.kpis.totalSales.toLocaleString()}`, icon: DollarSign, color: "from-blue-500/20 to-blue-600/20", text: "text-blue-400", trend: "+12.5%" },
+                  { label: "Total Sales", value: `₹${data.kpis.totalSales.toLocaleString()}`, icon: IndianRupee, color: "from-blue-500/20 to-blue-600/20", text: "text-blue-400", trend: "+12.5%" },
                   { label: "Total Profit", value: `₹${data.kpis.totalProfit.toLocaleString()}`, icon: TrendingUp, color: "from-purple-500/20 to-purple-600/20", text: "text-purple-400", trend: "+14.2%" },
                   { label: "Total Orders", value: data.kpis.totalOrders, icon: ShoppingCart, color: "from-pink-500/20 to-pink-600/20", text: "text-pink-400", trend: "+8.3%" },
                   { label: "Avg. Order Value", value: `₹${data.kpis.averageOrderValue.toFixed(2)}`, icon: Package, color: "from-orange-500/20 to-orange-600/20", text: "text-orange-400", trend: "+2.1%" },
