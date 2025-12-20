@@ -288,7 +288,7 @@ export default function AdminDashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-orange-200 text-sm font-medium">Revenue</p>
-                    <h3 className="text-3xl font-bold text-white mt-2">${data.profitExpense.total}</h3>
+                    <h3 className="text-3xl font-bold text-white mt-2">₹{data.profitExpense.total}</h3>
                     <p className="text-orange-200 text-xs mt-1">Net profit this month</p>
                   </div>
                   <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
@@ -308,7 +308,7 @@ export default function AdminDashboardPage() {
             <div className="grid grid-cols-4 gap-4">
               <Card className="bg-slate-800/50 backdrop-blur border-white/10">
                 <CardContent className="p-6">
-                  <div className="text-2xl font-bold text-purple-400">${data.salesByChannel.website.amount}</div>
+                  <div className="text-2xl font-bold text-purple-400">₹{data.salesByChannel.website.amount}</div>
                   <div className="text-xs text-slate-400 mt-1">({data.salesByChannel.website.percentage}% of total)</div>
                   <div className="text-sm text-slate-300 mt-2 font-medium">Website Sales</div>
                   <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
@@ -318,7 +318,7 @@ export default function AdminDashboardPage() {
               </Card>
               <Card className="bg-slate-800/50 backdrop-blur border-white/10">
                 <CardContent className="p-6">
-                  <div className="text-2xl font-bold text-pink-400">${data.salesByChannel.mobile.amount}</div>
+                  <div className="text-2xl font-bold text-pink-400">₹{data.salesByChannel.mobile.amount}</div>
                   <div className="text-xs text-slate-400 mt-1">({data.salesByChannel.mobile.percentage}% of total)</div>
                   <div className="text-sm text-slate-300 mt-2 font-medium">Mobile Sales</div>
                   <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
@@ -328,7 +328,7 @@ export default function AdminDashboardPage() {
               </Card>
               <Card className="bg-slate-800/50 backdrop-blur border-white/10">
                 <CardContent className="p-6">
-                  <div className="text-2xl font-bold text-blue-400">${data.salesByChannel.market.amount}</div>
+                  <div className="text-2xl font-bold text-blue-400">₹{data.salesByChannel.market.amount}</div>
                   <div className="text-xs text-slate-400 mt-1">({data.salesByChannel.market.percentage}% of total)</div>
                   <div className="text-sm text-slate-300 mt-2 font-medium">Market Sales</div>
                   <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
@@ -338,7 +338,7 @@ export default function AdminDashboardPage() {
               </Card>
               <Card className="bg-slate-800/50 backdrop-blur border-white/10">
                 <CardContent className="p-6">
-                  <div className="text-2xl font-bold text-orange-400">${data.salesByChannel.agent.amount}</div>
+                  <div className="text-2xl font-bold text-orange-400">₹{data.salesByChannel.agent.amount}</div>
                   <div className="text-xs text-slate-400 mt-1">({data.salesByChannel.agent.percentage}% of total)</div>
                   <div className="text-sm text-slate-300 mt-2 font-medium">Agent Sales</div>
                   <div className="w-full bg-slate-700 rounded-full h-2 mt-3">
