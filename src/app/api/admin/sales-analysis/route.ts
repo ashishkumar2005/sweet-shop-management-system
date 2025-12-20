@@ -37,12 +37,18 @@ export async function GET(request: Request) {
     const enrichedOrders = orders.map(order => {
       const sweet = sweetMap.get(order.sweetId)
       const category = sweet ? sweet.category : 'Unknown'
-      const profit = order.totalPrice * 0.3 // Assume 30% profit margin
+      const totalPrice = Number(order.totalPrice || 0)
+      const profit = totalPrice * 0.3 // Assume 30% profit margin
       
       return {
         ...order,
+        totalPrice,
         category,
-        profit
+        profit,
+        orderDate: order.orderDate,
+        region: order.region,
+        sweetName: order.sweetName,
+        quantity: order.quantity
       }
     }).filter(order => !categoryFilter || order.category === categoryFilter)
 
@@ -54,7 +60,7 @@ export async function GET(request: Request) {
     const profitMargin = totalSales > 0 ? (totalProfit / totalSales) * 100 : 0
 
     // 1. Sales trend over time (Monthly)
-    const monthlyData: any = {}
+    const monthlyData: Record<string, { name: string; sales: number; profit: number }> = {}
     enrichedOrders.forEach(o => {
       const date = new Date(o.orderDate)
       const monthYear = date.toLocaleString('default', { month: 'short', year: 'numeric' })
@@ -64,12 +70,12 @@ export async function GET(request: Request) {
       monthlyData[monthYear].sales += o.totalPrice
       monthlyData[monthYear].profit += o.profit
     })
-    const salesTrend = Object.values(monthlyData).sort((a: any, b: any) => {
+    const salesTrend = Object.values(monthlyData).sort((a, b) => {
       return new Date(a.name).getTime() - new Date(b.name).getTime()
     })
 
     // 2. Sales by category
-    const categoryData: any = {}
+    const categoryData: Record<string, { name: string; value: number }> = {}
     enrichedOrders.forEach(o => {
       if (!categoryData[o.category]) {
         categoryData[o.category] = { name: o.category, value: 0 }
@@ -79,7 +85,7 @@ export async function GET(request: Request) {
     const salesByCategory = Object.values(categoryData)
 
     // 3. Sales by region
-    const regionData: any = {}
+    const regionData: Record<string, { name: string; value: number }> = {}
     enrichedOrders.forEach(o => {
       const region = o.region || 'Unknown'
       if (!regionData[region]) {
@@ -90,22 +96,26 @@ export async function GET(request: Request) {
     const salesByRegion = Object.values(regionData)
 
     // 4. Top 5 and bottom 5 products
-    const productSales: any = {}
+    const productSales: Record<string, { name: string; sales: number; profit: number; quantity: number }> = {}
     enrichedOrders.forEach(o => {
-      if (!productSales[o.sweetName]) {
-        productSales[o.sweetName] = { name: o.sweetName, sales: 0, profit: 0, quantity: 0 }
+      const name = o.sweetName || 'Unknown'
+      if (!productSales[name]) {
+        productSales[name] = { name, sales: 0, profit: 0, quantity: 0 }
       }
-      productSales[o.sweetName].sales += o.totalPrice
-      productSales[o.sweetName].profit += o.profit
-      productSales[o.sweetName].quantity += o.quantity
+      productSales[name].sales += o.totalPrice
+      productSales[name].profit += o.profit
+      productSales[name].quantity += Number(o.quantity || 0)
     })
-    const sortedProducts = Object.values(productSales).sort((a: any, b: any) => b.sales - a.sales)
+    const sortedProducts = Object.values(productSales).sort((a, b) => b.sales - a.sales)
     const topProducts = sortedProducts.slice(0, 5)
     const bottomProducts = sortedProducts.length > 5 ? sortedProducts.slice(-5) : []
 
     // Insights & Recommendations
-    const topCategory = salesByCategory.sort((a: any, b: any) => b.value - a.value)[0]?.name || 'N/A'
-    const topRegion = salesByRegion.sort((a: any, b: any) => b.value - a.value)[0]?.name || 'N/A'
+    const topCategoryObj = salesByCategory.sort((a, b) => b.value - a.value)[0]
+    const topCategory = topCategoryObj ? topCategoryObj.name : 'N/A'
+    
+    const topRegionObj = salesByRegion.sort((a, b) => b.value - a.value)[0]
+    const topRegion = topRegionObj ? topRegionObj.name : 'N/A'
     
     const insights = [
       `Overall sales performance is driven by the ${topCategory} category.`,
@@ -135,7 +145,7 @@ export async function GET(request: Request) {
         salesByRegion,
         topProducts,
         bottomProducts,
-        profitVsSales: sortedProducts.map((p: any) => ({
+        profitVsSales: sortedProducts.map((p) => ({
           name: p.name,
           sales: p.sales,
           profit: p.profit
