@@ -156,10 +156,10 @@ export default function SalesAnalysisPage() {
               <TrendingUp className="h-4 w-4" />
               Sales Analysis
             </Button>
-            <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white hover:bg-slate-800">
-              <Package className="h-4 w-4" />
-              Inventory
-            </Button>
+              <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white hover:bg-slate-800" onClick={() => router.push('/admin')}>
+                <Package className="h-4 w-4" />
+                Inventory
+              </Button>
             <Button variant="ghost" className="w-full justify-start gap-3 text-slate-400 hover:text-white hover:bg-slate-800">
               <Users className="h-4 w-4" />
               Customers
