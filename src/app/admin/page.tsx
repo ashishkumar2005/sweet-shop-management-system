@@ -14,7 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { toast } from "sonner"
-import { Plus, Edit, Trash2, Package, Search, Loader2, LogOut, TrendingUp, TrendingDown, Box, AlertTriangle } from "lucide-react"
+import { Plus, Edit, Trash2, Package, Search, Loader2, LogOut, TrendingUp, TrendingDown, Box, AlertTriangle, BarChart3 } from "lucide-react"
 
 type SweetForm = {
   name: string
