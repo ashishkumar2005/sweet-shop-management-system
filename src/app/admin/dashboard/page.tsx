@@ -136,10 +136,10 @@ export default function AdminDashboardPage() {
                   <TrendingUp className="h-4 w-4" />
                   Sales Analysis
                 </Button>
-                <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5">
-                  <ShoppingCart className="h-4 w-4" />
-                  Products
-                </Button>
+                  <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5" onClick={() => router.push('/admin')}>
+                    <ShoppingCart className="h-4 w-4" />
+                    Products
+                  </Button>
               <Button variant="ghost" className="w-full justify-start gap-3 text-slate-300 hover:bg-white/5">
                 <Package className="h-4 w-4" />
                 Orders
