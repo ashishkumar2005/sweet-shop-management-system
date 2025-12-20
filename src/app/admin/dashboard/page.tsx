@@ -241,14 +241,14 @@ export default function AdminDashboardPage() {
             <Card className="bg-gradient-to-br from-purple-500 to-purple-600 border-0 shadow-xl shadow-purple-500/20">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-purple-200 text-sm font-medium">Total Sales</p>
-                    <h3 className="text-3xl font-bold text-white mt-2">${data.totalSales}</h3>
-                    <p className="text-purple-200 text-xs mt-1">+12.5% from last month</p>
-                  </div>
-                  <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-                    <DollarSign className="h-6 w-6 text-white" />
-                  </div>
+                    <div>
+                      <p className="text-purple-200 text-sm font-medium">Total Sales</p>
+                      <h3 className="text-3xl font-bold text-white mt-2">₹{data.totalSales}</h3>
+                      <p className="text-purple-200 text-xs mt-1">+12.5% from last month</p>
+                    </div>
+                    <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
+                      <IndianRupee className="h-6 w-6 text-white" />
+                    </div>
                 </div>
               </CardContent>
             </Card>
