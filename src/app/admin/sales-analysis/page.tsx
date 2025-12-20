@@ -6,7 +6,6 @@ import { useAuth } from "@/lib/auth-context"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { 
@@ -215,44 +214,41 @@ export default function SalesAnalysisPage() {
             </div>
             
             <div className="w-40">
-              <Select value={region} onValueChange={setRegion}>
-                <SelectTrigger className="bg-slate-950 border-slate-800">
-                  <SelectValue placeholder="Region" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Regions</SelectItem>
-                  {data?.filters.regions.map(r => (
-                    <SelectItem key={r} value={r}>{r}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <select 
+                value={region} 
+                onChange={(e) => setRegion(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-md px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+              >
+                <option value="all">All Regions</option>
+                {data?.filters.regions.map(r => (
+                  <option key={r} value={r}>{r}</option>
+                ))}
+              </select>
             </div>
 
             <div className="w-44">
-              <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="bg-slate-950 border-slate-800">
-                  <SelectValue placeholder="Category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  {data?.filters.categories.map(c => (
-                    <SelectItem key={c} value={c}>{c}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <select 
+                value={category} 
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-md px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+              >
+                <option value="all">All Categories</option>
+                {data?.filters.categories.map(c => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
             </div>
 
             <div className="w-40">
-              <Select value={timeRange} onValueChange={setTimeRange}>
-                <SelectTrigger className="bg-slate-950 border-slate-800">
-                  <SelectValue placeholder="Time Range" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="30">Last 30 Days</SelectItem>
-                  <SelectItem value="90">Last 90 Days</SelectItem>
-                  <SelectItem value="365">Last 12 Months</SelectItem>
-                </SelectContent>
-              </Select>
+              <select 
+                value={timeRange} 
+                onChange={(e) => setTimeRange(e.target.value)}
+                className="w-full bg-slate-950 border border-slate-800 rounded-md px-3 py-1.5 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+              >
+                <option value="30">Last 30 Days</option>
+                <option value="90">Last 90 Days</option>
+                <option value="365">Last 12 Months</option>
+              </select>
             </div>
 
             {(region !== "all" || category !== "all" || timeRange !== "365") && (
