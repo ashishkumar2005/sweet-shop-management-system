@@ -19,17 +19,18 @@ import {
   Calendar,
   Mail as MailIcon,
   Ticket,
-  TreePine,
-  DollarSign,
-  Download,
-  MoreHorizontal,
-  CreditCard,
-  Wallet,
-  TrendingUp,
-  Users,
-  Package,
-  BarChart3
-} from "lucide-react"
+    TreePine,
+    DollarSign,
+    Download,
+    MoreHorizontal,
+    CreditCard,
+    Wallet,
+    TrendingUp,
+    Users,
+    Package,
+    BarChart3,
+    IndianRupee
+  } from "lucide-react"
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart, PieChart, Pie, Cell } from 'recharts'
 
 type DashboardData = {
