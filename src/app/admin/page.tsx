@@ -201,10 +201,20 @@ export default function AdminPage() {
                 <p className="text-xs text-slate-400">Welcome, {user.name}</p>
               </div>
             </div>
-            <Button variant="ghost" onClick={handleLogout} className="text-slate-300 hover:text-white hover:bg-slate-800">
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" onClick={() => router.push('/admin/dashboard')} className="text-slate-300 hover:text-white hover:bg-slate-800">
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Dashboard
+              </Button>
+              <Button variant="ghost" onClick={() => router.push('/admin/sales-analysis')} className="text-slate-300 hover:text-white hover:bg-slate-800">
+                <TrendingUp className="h-4 w-4 mr-2" />
+                Sales Analysis
+              </Button>
+              <Button variant="ghost" onClick={handleLogout} className="text-slate-300 hover:text-white hover:bg-slate-800 ml-4">
+                <LogOut className="h-4 w-4 mr-2" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       </nav>
