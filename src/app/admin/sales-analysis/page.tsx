@@ -382,6 +382,8 @@ export default function SalesAnalysisPage() {
                           </Pie>
                           <Tooltip 
                             contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }}
+                            itemStyle={{ color: '#fff' }}
+                            labelStyle={{ color: '#fff' }}
                           />
                         </PieChart>
                       </ResponsiveContainer>
