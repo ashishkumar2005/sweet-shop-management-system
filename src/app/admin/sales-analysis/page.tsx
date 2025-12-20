@@ -32,7 +32,8 @@ import {
   ChevronRight,
   ChevronLeft,
   Lightbulb,
-  CheckCircle2
+  CheckCircle2,
+  IndianRupee
 } from "lucide-react"
 import { 
   BarChart, 
