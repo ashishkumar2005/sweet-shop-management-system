@@ -347,7 +347,8 @@ export default function SalesAnalysisPage() {
                           />
                           <Tooltip 
                             contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.5)' }}
-                            itemStyle={{ fontSize: '12px' }}
+                            itemStyle={{ color: '#fff', fontSize: '12px' }}
+                            labelStyle={{ color: '#fff' }}
                           />
                           <Area type="monotone" dataKey="sales" fill="url(#salesGradient)" stroke="#8b5cf6" strokeWidth={3} />
                           <Line type="monotone" dataKey="profit" stroke="#ec4899" strokeWidth={3} dot={{ fill: '#ec4899', r: 4 }} activeDot={{ r: 6 }} />
